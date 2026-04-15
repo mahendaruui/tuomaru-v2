@@ -307,8 +307,12 @@ class Admin extends CI_Controller
                 continue;
             }
 
-            // Default password = 4 karakter terakhir no_ujian
-            $pass = substr($noUjian, -4);
+            // Generate password acak 5 karakter (huruf besar + angka)
+            $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            $pass  = '';
+            for ($i = 0; $i < 5; $i++) {
+                $pass .= $chars[random_int(0, strlen($chars) - 1)];
+            }
 
             $data = [
                 'no_ujian'    => $noUjian,
