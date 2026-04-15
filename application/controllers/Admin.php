@@ -237,6 +237,119 @@ class Admin extends CI_Controller
         exit;
     }
 
+    public function importPeserta()
+    {
+        is_logged_in();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_FILES['file_csv']['tmp_name'])) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger">Tidak ada file yang diupload.</div>');
+            redirect('admin/viewpeserta');
+            return;
+        }
+
+        $file = $_FILES['file_csv'];
+        $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+        if ($ext !== 'csv') {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger">Format file harus <strong>.csv</strong>. Buka template di Excel lalu simpan sebagai CSV.</div>');
+            redirect('admin/viewpeserta');
+            return;
+        }
+
+        $handle = fopen($file['tmp_name'], 'r');
+        if (!$handle) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger">Gagal membaca file.</div>');
+            redirect('admin/viewpeserta');
+            return;
+        }
+
+        $row      = 0;
+        $inserted = 0;
+        $skipped  = 0;
+        $errors   = [];
+
+        while (($line = fgetcsv($handle, 2000, ',')) !== false) {
+            $row++;
+
+            // Lewati baris header
+            if ($row === 1) continue;
+
+            // Lewati baris kosong
+            if (empty(array_filter($line))) continue;
+
+            $noUjian = isset($line[0]) ? trim($line[0]) : '';
+            $nama    = isset($line[1]) ? trim($line[1]) : '';
+            $tempat  = isset($line[2]) ? trim($line[2]) : '';
+            $tanggal = isset($line[3]) ? trim($line[3]) : '';
+            $jenkel  = isset($line[4]) ? strtoupper(trim($line[4])) : '';
+            $email   = isset($line[5]) ? trim($line[5]) : '';
+            $hp      = isset($line[6]) ? trim($line[6]) : '';
+            // index 7 = kode prodi, diabaikan sementara
+
+            if (empty($noUjian) || empty($nama)) {
+                $errors[] = "Baris $row: no_ujian atau nama kosong, dilewati.";
+                $skipped++;
+                continue;
+            }
+
+            // Validasi jenkel
+            if (!in_array($jenkel, ['L', 'P', ''])) {
+                $errors[] = "Baris $row ($noUjian): jenis kelamin harus L atau P, dilewati.";
+                $skipped++;
+                continue;
+            }
+
+            // Cek duplikat no_ujian
+            $cek = $this->db->get_where('pendaftar', ['no_ujian' => $noUjian])->row();
+            if ($cek) {
+                $errors[] = "Baris $row: no_ujian '$noUjian' sudah ada, dilewati.";
+                $skipped++;
+                continue;
+            }
+
+            // Default password = 4 karakter terakhir no_ujian
+            $pass = substr($noUjian, -4);
+
+            $data = [
+                'no_ujian'    => $noUjian,
+                'nama'        => $nama,
+                'tempat'      => $tempat,
+                'tanggal'     => ($tanggal !== '') ? $tanggal : null,
+                'jenkel'      => $jenkel,
+                'email'       => $email,
+                'hp'          => $hp,
+                'pass'        => $pass,
+                'tgl_daftar'  => date('Y-m-d'),
+                'hadir_tulis' => 'N',
+                'tes_tulis'   => 'N',
+            ];
+
+            $this->db->insert('pendaftar', $data);
+            $inserted++;
+        }
+
+        fclose($handle);
+
+        $type = ($inserted > 0) ? 'success' : 'warning';
+        $msg  = "Berhasil import <strong>$inserted</strong> data peserta.";
+        if ($skipped > 0) {
+            $msg .= " <strong>$skipped</strong> baris dilewati.";
+        }
+        if (!empty($errors)) {
+            $msg .= '<ul class="mt-2 mb-0 small">';
+            foreach (array_slice($errors, 0, 10) as $e) {
+                $msg .= '<li>' . htmlspecialchars($e) . '</li>';
+            }
+            if (count($errors) > 10) {
+                $msg .= '<li>... dan ' . (count($errors) - 10) . ' lainnya</li>';
+            }
+            $msg .= '</ul>';
+        }
+
+        $this->session->set_flashdata('msg', "<div class='alert alert-$type'>$msg</div>");
+        redirect('admin/viewpeserta');
+    }
+
     public function viewsoal()
     {
         $this->load->model('my_model');

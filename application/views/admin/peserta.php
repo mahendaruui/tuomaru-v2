@@ -4,7 +4,47 @@
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Data Peserta</h1>
-    <a href="<?= base_url('admin/downloadTemplatePeserta') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Download Template Excel</a>
+    <a href="<?= base_url('admin/downloadTemplatePeserta') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+      <i class="fas fa-download fa-sm text-white-50"></i> Download Template Peserta
+    </a>
+  </div>
+
+  <!-- Flash Message -->
+  <?php if ($this->session->flashdata('msg')) : ?>
+    <?= $this->session->flashdata('msg') ?>
+  <?php endif; ?>
+
+  <!-- Upload CSV Card -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-success"><i class="fas fa-file-upload mr-1"></i> Import Data Peserta (CSV)</h6>
+      <button class="btn btn-sm btn-link p-0" type="button" data-toggle="collapse" data-target="#collapseImport">
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
+    <div class="collapse" id="collapseImport">
+      <div class="card-body">
+        <p class="text-sm text-muted mb-2">
+          <i class="fas fa-info-circle text-info"></i>
+          Download template Excel di atas &rarr; isi Sheet <strong>"Template Data"</strong> &rarr;
+          di Excel pilih <strong>File &gt; Save As &gt; CSV</strong> &rarr; upload file CSV di sini.
+          Password peserta akan otomatis diisi <strong>4 digit terakhir</strong> Nomor Ujian.
+        </p>
+        <form action="<?= base_url('admin/importPeserta') ?>" method="post" enctype="multipart/form-data">
+          <div class="input-group">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="file_csv" name="file_csv" accept=".csv">
+              <label class="custom-file-label" for="file_csv">Pilih file CSV...</label>
+            </div>
+            <div class="input-group-append">
+              <button class="btn btn-success" type="submit">
+                <i class="fas fa-upload"></i> Upload & Import
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <?php if (isset($pendaftar)) : ?>
@@ -55,3 +95,14 @@
 
     </div>
   <?php endif; ?>
+
+</div>
+<!-- End Page Content -->
+
+<script>
+// Update custom file input label with selected filename
+document.getElementById('file_csv').addEventListener('change', function () {
+  var fileName = this.files.length ? this.files[0].name : 'Pilih file CSV...';
+  this.nextElementSibling.textContent = fileName;
+});
+</script>
