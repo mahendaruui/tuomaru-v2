@@ -1,0 +1,48 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tuomaru_app
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8089:80"
+    depends_on:
+      - db
+    networks:
+      - db_network_tuomaru
+
+  db:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: tuomaru_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: tuomaru_dbmaster
+      MYSQL_USER: tuomaru_dbmaster
+      MYSQL_PASSWORD: rootpassword
+    ports:
+      - "3310:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - db_network_tuomaru
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
+    container_name: tuomaru_phpmyadmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8100:80"
+    networks:
+      - db_network_tuomaru
+
+volumes:
+  db_data:
+
+networks:
+  db_network_tuomaru:

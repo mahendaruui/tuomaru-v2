@@ -1,0 +1,21 @@
+# Logs & errors
+error_log
+application/logs/*.log
+
+# Cache
+application/cache/*
+!application/cache/index.html
+
+# Uploaded files
+assets/img/profile/*
+foto/*
+gambarsoal/*
+!foto/index.html
+!gambarsoal/index.html
+
+# SQL dumps
+*.sql
+
+# OS
+.DS_Store
+Thumbs.db
