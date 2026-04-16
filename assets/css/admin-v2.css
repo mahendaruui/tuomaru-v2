@@ -1076,6 +1076,169 @@ a:hover {
     color: var(--admin-ink);
 }
 
+/* ── Action btn ghost variant ──────────────────── */
+
+.action-btn--ghost {
+    background: rgba(255, 252, 247, 0.9);
+    color: var(--admin-ink);
+    border: 1px solid var(--admin-border);
+    box-shadow: 0 8px 20px rgba(20, 36, 33, 0.07);
+}
+
+.action-btn--ghost:hover {
+    color: var(--admin-ink);
+}
+
+/* ── Role Access page ──────────────────────────── */
+
+.role-access-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.role-badge-lg {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--admin-panel), var(--admin-panel-2));
+    color: #fff7eb;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.role-access-hint {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.9rem;
+}
+
+.access-grid-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 22px;
+    border-bottom: 2px solid var(--admin-border);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--admin-muted);
+}
+
+.access-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--admin-border);
+    transition: background 0.15s ease;
+}
+
+.access-row:last-child {
+    border-bottom: 0;
+}
+
+.access-row:hover {
+    background: rgba(24, 35, 32, 0.025);
+}
+
+.access-row__meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.access-row__num {
+    width: 28px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--admin-muted);
+    text-align: right;
+}
+
+.access-row__name {
+    font-weight: 600;
+    color: var(--admin-ink);
+}
+
+/* ── Toggle switch ─────────────────────────────── */
+
+.v2-toggle {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.v2-toggle__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.v2-toggle__track {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    border-radius: 999px;
+    background: rgba(24, 35, 32, 0.12);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.v2-toggle__thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(20, 36, 33, 0.2);
+    transition: transform 0.22s ease;
+}
+
+.v2-toggle__input:checked + .v2-toggle__track {
+    background: linear-gradient(135deg, var(--admin-panel-3), var(--admin-success));
+    box-shadow: 0 4px 12px rgba(46, 102, 98, 0.3);
+}
+
+.v2-toggle__input:checked + .v2-toggle__track .v2-toggle__thumb {
+    transform: translateX(24px);
+}
+
+/* ── Access status toast ───────────────────────── */
+
+.access-status {
+    display: none;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease;
+}
+
+.access-status--show {
+    display: block;
+}
+
+.access-status--ok {
+    background: rgba(60, 125, 87, 0.1);
+    color: var(--admin-success);
+    border: 1px solid rgba(60, 125, 87, 0.2);
+}
+
+.access-status--err {
+    background: rgba(165, 67, 45, 0.08);
+    color: var(--admin-danger);
+    border: 1px solid rgba(165, 67, 45, 0.18);
+}
+
 @media (max-width: 1199.98px) {
     .metrics-grid,
     .admin-grid-2,
