@@ -557,48 +557,16 @@ class Admin extends CI_Controller
         $data['gel'] = $this->uri->segment(3);
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        // Get the jadwal ID based on the gelombang parameter
-        $whereJadwal = ['gelombang' => $data['gel']];
-        $jadwalData = $this->my_model->cek_data("jadwal", $whereJadwal)->result();
-        $idjadwal = $jadwalData[0]->id;
+        $jadwalData = $this->my_model->cek_data('jadwal', ['gelombang' => $data['gel']])->row();
 
-        // pilih id_jdwl urutan terakhir aja
-        $this->db->order_by('id_jdwl', 'DESC');
-        $lastjadwal = $this->my_model->tampil("kelola_sipenmaru")->row();
-        $id_jdwl_terakhir = isset($lastjadwal->id_jdwl) ? $lastjadwal->id_jdwl : null;
+        $this->db->order_by('id', 'DESC');
+        $data['pesertates'] = $this->my_model->cek_data('pendaftar', ['sesi' => $data['gel']])->result();
 
-        if (!empty($jadwalData)) {
-            $where = ['a.sesi' => $data['gel'], 'a.id_jdwl' => $id_jdwl_terakhir];
-            // Join pendaftar with kelola_pendaftar based on id_jdwl
-            $this->db->join('kelola_sipenmaru b', 'a.id_jdwl = b.id_jdwl', 'left');
-            $this->db->select('a.*, b.ket, b.tahun');
-            $this->db->order_by("a.id", "DESC");
-            $pendaftar = $this->my_model->cek_data("pendaftar a", $where);
-            $data['pesertates'] = $pendaftar->result();
-        }
+        $this->db->order_by('id', 'DESC');
+        $this->db->where('sesi IS NULL');
+        $data['pesetasaja'] = $this->db->get('pendaftar')->result();
 
-
-        $wherenu = ['a.sesi' => NULL, 'a.id_jdwl' => $id_jdwl_terakhir];
-
-        // Join pendaftar with kelola_pendaftar based on id_jdwl
-        $this->db->join('kelola_sipenmaru b', 'a.id_jdwl = b.id_jdwl', 'left');
-        $this->db->select('a.*, b.ket, b.tahun');
-        $this->db->where('a.bayar', 'Y');
-        $this->db->order_by("a.id", "DESC");
-        $pendaftar = $this->my_model->cek_data("pendaftar a", $wherenu);
-        $data['pesetasaja'] = $pendaftar->result();
-        // Get ket and tahun for the view
-        $this->db->select('ket, tahun');
-        $this->db->limit(1);
-        $this->db->order_by('id_jdwl', 'DESC');
-        $kelolaData = $this->my_model->tampil("kelola_sipenmaru")->row();
-        $data['ket'] = isset($kelolaData->ket) ? $kelolaData->ket : '';
-        $data['tahun'] = isset($kelolaData->tahun) ? $kelolaData->tahun : '';
-
-
-        if (!isset($data['pesertates'])) {
-            $data['pesertates'] = [];
-        }
+        $data['jadwalInfo'] = $jadwalData;
 
         $this->load->view('templates_v2/header', $data);
         $this->load->view('templates_v2/sidebar', $data);
@@ -611,12 +579,6 @@ class Admin extends CI_Controller
     {
         $this->load->model('my_model');
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        // $IDSET = $this->uri->segment(3);
-
-        $whereadwal = ['gelombang' => $this->input->post('sesigel')];
-        $cekidjadwal = $this->my_model->cek_data("jadwal", $whereadwal)->result();
-
-        $id_jdwl = $cekidjadwal[0]->id;
 
         $sesigel = $this->input->post('sesigel');
         $gel = $this->input->post('gel');

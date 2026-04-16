@@ -23,12 +23,12 @@
             <strong class="detail-stat__value">Gelombang <?= htmlspecialchars($gel); ?></strong>
         </div>
         <div class="detail-stat">
-            <span class="detail-stat__label">Periode</span>
-            <strong class="detail-stat__value"><?= htmlspecialchars($ket ?: '-'); ?></strong>
+            <span class="detail-stat__label">Tanggal Tes</span>
+            <strong class="detail-stat__value"><?= !empty($jadwalInfo) ? htmlspecialchars(tgl_indo(date('Y-m-d', $jadwalInfo->tgl_tes))) : '-'; ?></strong>
         </div>
         <div class="detail-stat">
-            <span class="detail-stat__label">Tahun</span>
-            <strong class="detail-stat__value"><?= htmlspecialchars($tahun ?: '-'); ?></strong>
+            <span class="detail-stat__label">Waktu Tes</span>
+            <strong class="detail-stat__value"><?= !empty($jadwalInfo) ? htmlspecialchars(date('H:i', $jadwalInfo->tgl_tes) . ' WIB') : '-'; ?></strong>
         </div>
         <div class="detail-stat">
             <span class="detail-stat__label">Peserta Terpasang</span>
@@ -104,7 +104,7 @@
             <div class="assign-card__head">
                 <div>
                     <p class="admin-eyebrow">Belum Dijadwalkan</p>
-                    <h3>Pendaftar Siap Dipasang</h3>
+                    <h3>Peserta Hasil Import</h3>
                 </div>
                 <span class="v2-card__count"><?= count($pesetasaja ?? []); ?> peserta</span>
             </div>
