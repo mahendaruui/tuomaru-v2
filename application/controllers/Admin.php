@@ -110,21 +110,26 @@ class Admin extends CI_Controller
         $data['title'] = 'Peserta';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        $this->db->order_by('id_jdwl', 'DESC');
-        $this->db->limit(1);
-        $cekglm = $this->my_model->tampil("pendaftar")->result();
-        $jadwal = null;
-        foreach ($cekglm as $gl) {
-            $jadwal = $gl->id_jdwl;
-        }
+        // Cari id_jdwl terbaru yang tidak null
+        $latestRow = $this->db
+            ->select('id_jdwl')
+            ->where('id_jdwl IS NOT NULL')
+            ->order_by('id_jdwl', 'DESC')
+            ->limit(1)
+            ->get('pendaftar')
+            ->row();
 
-        $data['pendaftar'] = [];
+        $jadwal = $latestRow ? $latestRow->id_jdwl : null;
+
+        $this->db->order_by('id', 'DESC');
         if ($jadwal !== null) {
-            $where = ['id_jdwl' => $jadwal];
-            $this->db->order_by('id', 'DESC');
-            $pendaftar = $this->my_model->cek_data('pendaftar', $where);
-            $data['pendaftar'] = $pendaftar->result();
+            // Tampilkan peserta gelombang terkini
+            $pendaftar = $this->my_model->cek_data('pendaftar', ['id_jdwl' => $jadwal]);
+        } else {
+            // Belum ada jadwal — tampilkan semua peserta
+            $pendaftar = $this->my_model->tampil('pendaftar');
         }
+        $data['pendaftar'] = $pendaftar->result();
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
