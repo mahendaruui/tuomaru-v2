@@ -20,6 +20,7 @@ class Admin extends CI_Controller
 
         // count peserta ujian
         $jdw = $this->my_model->tampil('jadwal')->num_rows();
+        $data1 = [];
 
         for ($i = 1; $i <= $jdw; $i++) {
             $where1 = ['sesi' =>  $i];
@@ -27,8 +28,9 @@ class Admin extends CI_Controller
             foreach ($jmlpesertaa as $j) {
                 $data1[] = $j->sesi;
             }
-            $data['jmlpeserta'] = $data1;
         }
+        $data['jmlpeserta'] = $data1;
+        $data['jmlpesertaCount'] = count($data1);
 
         // count peserta sudah ujian
         $sudahtes = array('hadir_tulis' => "Y");
@@ -41,12 +43,11 @@ class Admin extends CI_Controller
         // count soal
         $data['jmlsoal'] = $this->my_model->tampil('m_soal')->num_rows();
 
-
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/index', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/index_v2', $data);
+        $this->load->view('templates_v2/footer');
     }
 
 
