@@ -1,112 +1,88 @@
 <!DOCTYPE html>
-<html dir="ltr">
-
+<html lang="id">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
+  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <!-- Favicon icon -->
-  <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url(); ?>/favicon.ico">
-  <title><?php echo $title; ?></title>
-  <!-- Custom CSS -->
-  <link href="<?= base_url(); ?>vendor/matrix_admin/dist/css/style.min.css" rel="stylesheet">
+  <meta name="description" content="Login peserta tes online UUI">
+  <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('favicon.ico'); ?>">
+  <title><?= $title; ?></title>
+  <link href="<?= base_url('assets/vendor/fontawesome-free/css/all.min.css'); ?>" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link href="<?= base_url('assets/css/sb-admin-2.min.css'); ?>" rel="stylesheet">
+  <link href="<?= base_url('assets/css/auth-v2.css'); ?>" rel="stylesheet">
 </head>
-
-<body>
-  <div class="main-wrapper">
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Login box.scss -->
-    <!-- ============================================================== -->
-    <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
-      <div class="auth-box bg-dark border-secondary">
-        <div id="loginform">
-          <div class="text-center p-t-10 p-b-10">
-
-            <img src="<?= base_url(); ?>assets/img/uuilogo.png" width="300px" alt="uuilogo" class="mb-3">
-            <h4 class="text-light">Selamat Datang di Sistem Tes Ujian Masuk Universitas Ubudiyah Indonesia</h4>
+<body class="auth-shell">
+  <section class="auth-login auth-login--member">
+    <div class="auth-login__card">
+      <aside class="auth-brand auth-brand--member">
+        <div>
+          <div class="auth-brand__crest">
+            <img src="<?= base_url('assets/img/uuilogo.png'); ?>" alt="Logo UUI">
           </div>
-          <!-- Form -->
-          <form class="form-horizontal m-t-10" id="loginform" action="<?php base_url(); ?>login/ceklogin" method="post">
-            <div class="row p-b-10">
-              <div class="col-12">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text bg-success text-white" id="basic-addon1"><i class="ti-user"></i></span>
-                  </div>
-                  <input type="text" name="username" class="form-control form-control-lg" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required>
-                </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text bg-warning text-white" id="basic-addon2"><i class="ti-pencil"></i></span>
-                  </div>
-                  <input type="password" name="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>
-                </div>
+          <p class="auth-brand__eyebrow">Portal Peserta Ujian</p>
+          <h1 class="auth-brand__title">Selamat Datang di Tes Masuk UUI</h1>
+          <p class="auth-brand__text">Masuk menggunakan nomor ujian dan password yang diberikan panitia untuk memulai proses ujian online.</p>
+        </div>
+
+        <div class="auth-brand__stats">
+          <div class="auth-brand__stat">
+            <strong>Nomor Ujian</strong>
+            <span>Gunakan identitas peserta resmi</span>
+          </div>
+          <div class="auth-brand__stat">
+            <strong>Akses Ujian</strong>
+            <span>Masuk ke dashboard tes peserta</span>
+          </div>
+          <div class="auth-brand__stat">
+            <strong>Pantau Hasil</strong>
+            <span>Status ujian tercatat otomatis</span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="auth-panel">
+        <div class="auth-panel__inner">
+          <p class="auth-panel__eyebrow">Login Peserta</p>
+          <h2 class="auth-panel__title">Masuk ke dashboard ujian</h2>
+          <p class="auth-panel__text">Isi kredensial peserta untuk memulai sesi ujian yang sudah dijadwalkan.</p>
+
+          <div class="auth-alert">
+            <?php $__msg = $this->session->userdata('member_msg'); if ($__msg) : $this->session->unset_userdata('member_msg'); ?>
+              <?= $__msg; ?>
+            <?php endif; ?>
+          </div>
+
+          <form method="post" action="<?= base_url('login/ceklogin'); ?>">
+            <div class="auth-field">
+              <label class="auth-label" for="username">Nomor Ujian</label>
+              <div class="auth-input-wrap">
+                <i class="fas fa-id-card"></i>
+                <input type="text" name="username" id="username" class="auth-input" placeholder="Contoh: 241000123" required autocomplete="username">
               </div>
             </div>
-            <div class="row border-top border-secondary">
-              <div class="col-12">
-                <div class="form-group">
-                  <div class="p-t-10">
-                    <!-- <button class="btn btn-info" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> Lost password?</button> -->
-                    <button class="btn btn-success float-right" type="submit">Login</button>
-                  </div>
-                </div>
+
+            <div class="auth-field">
+              <label class="auth-label" for="password">Password</label>
+              <div class="auth-input-wrap">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" id="password" class="auth-input" placeholder="Masukkan password" required autocomplete="current-password">
               </div>
             </div>
+
+            <button class="auth-submit" type="submit">
+              <i class="fas fa-sign-in-alt"></i>
+              Login Peserta
+            </button>
           </form>
+
+          <p class="auth-note">Jika Anda admin, gunakan halaman login admin pada jalur auth.</p>
         </div>
       </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- Login box.scss -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Page wrapper scss in scafholding.scss -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Page wrapper scss in scafholding.scss -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Right Sidebar -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Right Sidebar -->
-    <!-- ============================================================== -->
-  </div>
-  <!-- ============================================================== -->
-  <!-- All Required js -->
-  <!-- ============================================================== -->
-  <script src="<?= base_url(); ?>vendor/matrix_admin/assets/libs/jquery/dist/jquery.min.js"></script>
-  <!-- Bootstrap tether Core JavaScript -->
-  <script src="<?= base_url(); ?>vendor/matrix_admin/assets/libs/popper.js/dist/umd/popper.min.js"></script>
-  <script src="<?= base_url(); ?>vendor/matrix_admin/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-  <!-- ============================================================== -->
-  <!-- This page plugin js -->
-  <!-- ============================================================== -->
-  <script>
-    $('[data-toggle="tooltip"]').tooltip();
-    $(".preloader").fadeOut();
-    // ============================================================== 
-    // Login and Recover Password 
-    // ============================================================== 
-    $('#to-recover').on("click", function() {
-      $("#loginform").slideUp();
-      $("#recoverform").fadeIn();
-    });
-    $('#to-login').click(function() {
+  </section>
 
-      $("#recoverform").hide();
-      $("#loginform").fadeIn();
-    });
-  </script>
-
+  <script src="<?= base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
+  <script src="<?= base_url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
 </body>
-
 </html>

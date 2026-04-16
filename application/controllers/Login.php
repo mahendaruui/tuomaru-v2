@@ -28,10 +28,7 @@ class Login extends CI_Controller
 
     $cekmember = $this->my_model->cek_data("pendaftar", $where)->row_array();
     if (!$cekmember) {
-      $this->session->set_flashdata("msg", "<br/><div class='alert alert-danger' role='alert'>
-      <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>
-      Username atau Password Salah!!.
-      </div>");
+      $this->session->set_userdata('member_msg', "<div class='alert alert-danger alert-dismissible fade show' role='alert'>Username atau password salah.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
       redirect('login');
     } else {
       $data = [
@@ -52,10 +49,7 @@ class Login extends CI_Controller
 
     $cekmember = $this->my_model->cek_data("pendaftar", $where)->row_array();
     if (!$cekmember) {
-      $this->session->set_flashdata("msg", "<br/><div class='alert alert-danger' role='alert'>
-			<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>
-			Username atau Password Salah!!.
-      </div>");
+      $this->session->set_userdata('member_msg', "<div class='alert alert-danger alert-dismissible fade show' role='alert'>Username atau password salah.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
       redirect('login');
     } else {
       $data = [
@@ -72,7 +66,7 @@ class Login extends CI_Controller
 
     $this->session->sess_destroy();
 
-    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">You have been logged out!</div>');
+    $this->session->set_userdata('member_msg', "<div class='alert alert-success alert-dismissible fade show' role='alert'>Anda berhasil logout.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
     redirect('login');
   }
 }
