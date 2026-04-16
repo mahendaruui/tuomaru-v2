@@ -142,6 +142,8 @@ class Admin extends CI_Controller
     {
         is_logged_in();
 
+        require_once FCPATH . 'vendor/autoload.php';
+
         $prodiList = $this->db
             ->select('id_prodi, nama_prodi, id_fakultas')
             ->where('status', 'Y')
@@ -158,87 +160,104 @@ class Admin extends CI_Controller
             '1006' => 'Fakultas Teknik',
         ];
 
-        $filename = 'template_import_peserta.xls';
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        // ── Sheet 1: Template Data ────────────────────────────────────────
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('Template Data');
+
+        $headers = [
+            'A' => ['label' => 'Nomor Ujian',               'field' => 'no_ujian'],
+            'B' => ['label' => 'Nama Lengkap',               'field' => 'nama'],
+            'C' => ['label' => 'Tempat Lahir',               'field' => 'tempat'],
+            'D' => ['label' => 'Tanggal Lahir (YYYY-MM-DD)', 'field' => 'tanggal'],
+            'E' => ['label' => 'Jenis Kelamin (L/P)',        'field' => 'jenkel'],
+            'F' => ['label' => 'Email',                      'field' => 'email'],
+            'G' => ['label' => 'No. HP',                     'field' => 'hp'],
+            'H' => ['label' => 'NIK (No. Identitas)',        'field' => 'no_identitas'],
+            'I' => ['label' => 'Asal Sekolah',               'field' => 'asal_sekolah'],
+            'J' => ['label' => 'Agama',                      'field' => 'agama'],
+            'K' => ['label' => 'Alamat',                     'field' => 'alamat'],
+            'L' => ['label' => 'Desa',                       'field' => 'alamat_desa'],
+            'M' => ['label' => 'Kecamatan',                  'field' => 'alamat_kec'],
+            'N' => ['label' => 'Kota/Kabupaten',             'field' => 'alamat_kota'],
+            'O' => ['label' => 'Provinsi',                   'field' => 'alamat_prov'],
+            'P' => ['label' => 'Kode Program Studi',         'field' => 'prodi'],
+        ];
+
+        // Style header — biru
+        $headerStyle = [
+            'font'      => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill'      => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => '4472C4']],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+        ];
+
+        $col = 1;
+        foreach ($headers as $colLetter => $info) {
+            $cell = $sheet1->getCellByColumnAndRow($col, 1);
+            $cell->setValue($info['label']);
+            $sheet1->getStyleByColumnAndRow($col, 1)->applyFromArray($headerStyle);
+            $sheet1->getColumnDimensionByColumn($col)->setAutoSize(true);
+            $col++;
+        }
+
+        // 10 baris kosong
+        for ($row = 2; $row <= 11; $row++) {
+            for ($c = 1; $c <= count($headers); $c++) {
+                $sheet1->getCellByColumnAndRow($c, $row)->setValue('');
+            }
+        }
+
+        // Freeze header row
+        $sheet1->freezePane('A2');
+
+        // ── Sheet 2: Referensi Prodi ──────────────────────────────────────
+        $sheet2 = $spreadsheet->createSheet();
+        $sheet2->setTitle('Referensi Prodi');
+
+        // Judul
+        $sheet2->mergeCells('A1:C1');
+        $sheet2->setCellValue('A1', 'REFERENSI KODE PROGRAM STUDI');
+        $sheet2->getStyle('A1')->applyFromArray([
+            'font'      => ['bold' => true, 'color' => ['rgb' => 'FFFFFF'], 'size' => 12],
+            'fill'      => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => 'ED7D31']],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+        ]);
+
+        // Header kolom
+        $refHeaders = ['A2' => 'Kode Prodi', 'B2' => 'Nama Program Studi', 'C2' => 'Fakultas'];
+        foreach ($refHeaders as $cell => $label) {
+            $sheet2->setCellValue($cell, $label);
+            $sheet2->getStyle($cell)->applyFromArray([
+                'font' => ['bold' => true],
+                'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFC000']],
+            ]);
+        }
+
+        $row = 3;
+        foreach ($prodiList as $prodi) {
+            $namaFakultas = $fakultasMap[$prodi->id_fakultas] ?? $prodi->id_fakultas;
+            $sheet2->setCellValue("A$row", $prodi->id_prodi);
+            $sheet2->setCellValue("B$row", $prodi->nama_prodi);
+            $sheet2->setCellValue("C$row", $namaFakultas);
+            $sheet2->getStyle("A$row")->getFont()->setBold(true);
+            $row++;
+        }
+
+        $sheet2->getColumnDimension('A')->setWidth(14);
+        $sheet2->getColumnDimension('B')->setAutoSize(true);
+        $sheet2->getColumnDimension('C')->setAutoSize(true);
+
+        // Kembali ke sheet pertama
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // Output XLSX
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="template_import_peserta.xlsx"');
         header('Cache-Control: max-age=0');
 
-        // SpreadsheetML — support multi-sheet tanpa library eksternal
-        echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        echo '<?mso-application progid="Excel.Sheet"?>' . "\n";
-        echo '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"'
-            . ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"'
-            . ' xmlns:x="urn:schemas-microsoft-com:office:excel">' . "\n";
-
-        // ── Styles ────────────────────────────────────────────────────────
-        echo '<Styles>'
-            . '<Style ss:ID="hdr"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#4472C4" ss:Pattern="Solid"/></Style>'
-            . '<Style ss:ID="ref_title"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#ED7D31" ss:Pattern="Solid"/></Style>'
-            . '<Style ss:ID="ref_hdr"><Font ss:Bold="1"/><Interior ss:Color="#FFC000" ss:Pattern="Solid"/></Style>'
-            . '<Style ss:ID="bold"><Font ss:Bold="1"/></Style>'
-            . '</Styles>' . "\n";
-
-        // ── Sheet 1 : Template Data ───────────────────────────────────────
-        echo '<Worksheet ss:Name="Template Data"><Table>' . "\n";
-
-        // header row
-        echo '<Row>';
-        $headers = [
-            'Nomor Ujian',
-            'Nama Lengkap',
-            'Tempat Lahir',
-            'Tanggal Lahir (YYYY-MM-DD)',
-            'Jenis Kelamin (L/P)',
-            'Email',
-            'No. HP',
-            'Kode Program Studi',
-        ];
-        foreach ($headers as $h) {
-            echo '<Cell ss:StyleID="hdr"><Data ss:Type="String">' . htmlspecialchars($h) . '</Data></Cell>';
-        }
-        echo '</Row>' . "\n";
-
-        // 5 baris kosong untuk diisi
-        for ($i = 0; $i < 5; $i++) {
-            echo '<Row>';
-            foreach ($headers as $h) {
-                echo '<Cell><Data ss:Type="String"></Data></Cell>';
-            }
-            echo '</Row>' . "\n";
-        }
-
-        echo '</Table></Worksheet>' . "\n";
-
-        // ── Sheet 2 : Referensi Kode Prodi ───────────────────────────────
-        echo '<Worksheet ss:Name="Referensi Prodi"><Table>' . "\n";
-
-        // judul
-        echo '<Row>'
-            . '<Cell ss:StyleID="ref_title" ss:MergeAcross="2"><Data ss:Type="String">REFERENSI KODE PROGRAM STUDI</Data></Cell>'
-            . '</Row>' . "\n";
-
-        // header kolom
-        echo '<Row>'
-            . '<Cell ss:StyleID="ref_hdr"><Data ss:Type="String">Kode Prodi</Data></Cell>'
-            . '<Cell ss:StyleID="ref_hdr"><Data ss:Type="String">Nama Program Studi</Data></Cell>'
-            . '<Cell ss:StyleID="ref_hdr"><Data ss:Type="String">Fakultas</Data></Cell>'
-            . '</Row>' . "\n";
-
-        foreach ($prodiList as $prodi) {
-            $namaFakultas = isset($fakultasMap[$prodi->id_fakultas])
-                ? $fakultasMap[$prodi->id_fakultas]
-                : $prodi->id_fakultas;
-
-            echo '<Row>'
-                . '<Cell ss:StyleID="bold"><Data ss:Type="String">' . htmlspecialchars($prodi->id_prodi) . '</Data></Cell>'
-                . '<Cell><Data ss:Type="String">' . htmlspecialchars($prodi->nama_prodi) . '</Data></Cell>'
-                . '<Cell><Data ss:Type="String">' . htmlspecialchars($namaFakultas) . '</Data></Cell>'
-                . '</Row>' . "\n";
-        }
-
-        echo '</Table></Worksheet>' . "\n";
-        echo '</Workbook>';
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
         exit;
     }
 
@@ -252,18 +271,25 @@ class Admin extends CI_Controller
             return;
         }
 
+        require_once FCPATH . 'vendor/autoload.php';
+
         $file = $_FILES['file_csv'];
         $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
-        if ($ext !== 'csv') {
-            $this->session->set_flashdata('msg', '<div class="alert alert-danger">Format file harus <strong>.csv</strong>. Buka template di Excel lalu simpan sebagai CSV.</div>');
+        if (!in_array($ext, ['xlsx', 'xls', 'csv'])) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger">Format file harus <strong>.xlsx</strong>, .xls, atau .csv.</div>');
             redirect('admin/viewpeserta');
             return;
         }
 
-        $handle = fopen($file['tmp_name'], 'r');
-        if (!$handle) {
-            $this->session->set_flashdata('msg', '<div class="alert alert-danger">Gagal membaca file.</div>');
+        try {
+            $reader      = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file['tmp_name']);
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file['tmp_name']);
+            $sheet       = $spreadsheet->getActiveSheet();
+            $rows        = $sheet->toArray(null, true, true, false);
+        } catch (\Exception $e) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger">Gagal membaca file: ' . htmlspecialchars($e->getMessage()) . '</div>');
             redirect('admin/viewpeserta');
             return;
         }
@@ -273,23 +299,31 @@ class Admin extends CI_Controller
         $skipped  = 0;
         $errors   = [];
 
-        while (($line = fgetcsv($handle, 2000, ',')) !== false) {
+        foreach ($rows as $line) {
             $row++;
 
-            // Lewati baris header
+            // Lewati baris header (baris pertama)
             if ($row === 1) continue;
 
             // Lewati baris kosong
-            if (empty(array_filter($line))) continue;
+            if (empty(array_filter($line, fn($v) => $v !== null && $v !== ''))) continue;
 
-            $noUjian = isset($line[0]) ? trim($line[0]) : '';
-            $nama    = isset($line[1]) ? trim($line[1]) : '';
-            $tempat  = isset($line[2]) ? trim($line[2]) : '';
-            $tanggal = isset($line[3]) ? trim($line[3]) : '';
-            $jenkel  = isset($line[4]) ? strtoupper(trim($line[4])) : '';
-            $email   = isset($line[5]) ? trim($line[5]) : '';
-            $hp      = isset($line[6]) ? trim($line[6]) : '';
-            // index 7 = kode prodi, diabaikan sementara
+            $noUjian   = trim((string)($line[0]  ?? ''));
+            $nama      = trim((string)($line[1]  ?? ''));
+            $tempat    = trim((string)($line[2]  ?? ''));
+            $tanggal   = trim((string)($line[3]  ?? ''));
+            $jenkel    = strtoupper(trim((string)($line[4]  ?? '')));
+            $email     = trim((string)($line[5]  ?? ''));
+            $hp        = trim((string)($line[6]  ?? ''));
+            $nik       = trim((string)($line[7]  ?? ''));
+            $sekolah   = trim((string)($line[8]  ?? ''));
+            $agama     = trim((string)($line[9]  ?? ''));
+            $alamat    = trim((string)($line[10] ?? ''));
+            $desa      = trim((string)($line[11] ?? ''));
+            $kec       = trim((string)($line[12] ?? ''));
+            $kota      = trim((string)($line[13] ?? ''));
+            $prov      = trim((string)($line[14] ?? ''));
+            // index 15 = kode prodi, diabaikan sementara
 
             if (empty($noUjian) || empty($nama)) {
                 $errors[] = "Baris $row: no_ujian atau nama kosong, dilewati.";
@@ -297,7 +331,6 @@ class Admin extends CI_Controller
                 continue;
             }
 
-            // Validasi jenkel
             if (!in_array($jenkel, ['L', 'P', ''])) {
                 $errors[] = "Baris $row ($noUjian): jenis kelamin harus L atau P, dilewati.";
                 $skipped++;
@@ -305,8 +338,7 @@ class Admin extends CI_Controller
             }
 
             // Cek duplikat no_ujian
-            $cek = $this->db->get_where('pendaftar', ['no_ujian' => $noUjian])->row();
-            if ($cek) {
+            if ($this->db->get_where('pendaftar', ['no_ujian' => $noUjian])->row()) {
                 $errors[] = "Baris $row: no_ujian '$noUjian' sudah ada, dilewati.";
                 $skipped++;
                 continue;
@@ -320,24 +352,30 @@ class Admin extends CI_Controller
             }
 
             $data = [
-                'no_ujian'    => $noUjian,
-                'nama'        => $nama,
-                'tempat'      => $tempat,
-                'tanggal'     => ($tanggal !== '') ? $tanggal : null,
-                'jenkel'      => $jenkel,
-                'email'       => $email,
-                'hp'          => $hp,
-                'pass'        => $pass,
-                'tgl_daftar'  => date('Y-m-d'),
-                'hadir_tulis' => 'N',
-                'tes_tulis'   => 'N',
+                'no_ujian'     => $noUjian,
+                'nama'         => $nama,
+                'tempat'       => $tempat,
+                'tanggal'      => ($tanggal !== '') ? $tanggal : null,
+                'jenkel'       => $jenkel,
+                'email'        => $email,
+                'hp'           => $hp,
+                'no_identitas' => $nik,
+                'asal_sekolah' => $sekolah,
+                'agama'        => $agama,
+                'alamat'       => $alamat,
+                'alamat_desa'  => $desa,
+                'alamat_kec'   => $kec,
+                'alamat_kota'  => $kota,
+                'alamat_prov'  => $prov,
+                'pass'         => $pass,
+                'tgl_daftar'   => date('Y-m-d'),
+                'hadir_tulis'  => 'N',
+                'tes_tulis'    => 'N',
             ];
 
             $this->db->insert('pendaftar', $data);
             $inserted++;
         }
-
-        fclose($handle);
 
         $type = ($inserted > 0) ? 'success' : 'warning';
         $msg  = "Berhasil import <strong>$inserted</strong> data peserta.";

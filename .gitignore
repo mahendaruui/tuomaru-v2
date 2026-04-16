@@ -16,6 +16,9 @@ gambarsoal/*
 # SQL dumps
 *.sql
 
+# Composer vendor (besar, tidak perlu di-commit)
+vendor/
+
 # OS
 .DS_Store
 Thumbs.db

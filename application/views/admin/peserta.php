@@ -17,7 +17,7 @@
   <!-- Upload CSV Card -->
   <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex align-items-center justify-content-between">
-      <h6 class="m-0 font-weight-bold text-success"><i class="fas fa-file-upload mr-1"></i> Import Data Peserta (CSV)</h6>
+      <h6 class="m-0 font-weight-bold text-success"><i class="fas fa-file-upload mr-1"></i> Import Data Peserta (Excel)</h6>
       <button class="btn btn-sm btn-link p-0" type="button" data-toggle="collapse" data-target="#collapseImport">
         <i class="fas fa-chevron-down"></i>
       </button>
@@ -26,15 +26,15 @@
       <div class="card-body">
         <p class="text-sm text-muted mb-2">
           <i class="fas fa-info-circle text-info"></i>
-          Download template Excel di atas &rarr; isi Sheet <strong>"Template Data"</strong> &rarr;
-          di Excel pilih <strong>File &gt; Save As &gt; CSV</strong> &rarr; upload file CSV di sini.
-          Password peserta akan otomatis diisi <strong>4 digit terakhir</strong> Nomor Ujian.
+          Download template di atas &rarr; isi Sheet <strong>"Template Data"</strong> &rarr;
+          simpan file &rarr; upload <strong>.xlsx / .xls / .csv</strong> di sini.<br>
+          Password peserta akan dibuat otomatis <strong>5 karakter acak</strong> (huruf besar + angka).
         </p>
         <form action="<?= base_url('admin/importPeserta') ?>" method="post" enctype="multipart/form-data">
           <div class="input-group">
             <div class="custom-file">
-              <input type="file" class="custom-file-input" id="file_csv" name="file_csv" accept=".csv">
-              <label class="custom-file-label" for="file_csv">Pilih file CSV...</label>
+              <input type="file" class="custom-file-input" id="file_csv" name="file_csv" accept=".xlsx,.xls,.csv">
+              <label class="custom-file-label" for="file_csv">Pilih file Excel atau CSV...</label>
             </div>
             <div class="input-group-append">
               <button class="btn btn-success" type="submit">
