@@ -13,7 +13,7 @@ $menu = $this->db->query($queryMenu)->result_array();
         <a class="admin-brand" href="<?= base_url('admin'); ?>">
             <span class="admin-brand__mark"><i class="fas fa-university"></i></span>
             <span>
-                <strong>SIPENMARU</strong>
+                <strong>TUOMARU</strong>
                 <small>UUI Admin Console</small>
             </span>
         </a>
