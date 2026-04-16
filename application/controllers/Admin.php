@@ -423,10 +423,10 @@ class Admin extends CI_Controller
         $where = array('id' => $IDSET);
         $hapussoal = $this->my_model->hapus("m_soal", $where);
         if ($hapussoal) {
-            $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Berhasil Dihapus!!</div></div>");
+            $this->session->set_userdata("soal_msg", "<div class='alert alert-success alert-dismissible fade show' role='alert'>Data berhasil dihapus.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             redirect($_SERVER['HTTP_REFERER']);
         } else {
-            $this->session->set_flashdata("msg", "<br/><div class='card bg-warning text-white shadow mb-2'><div class='card-body'>Data Gagal Dihapus!!</div></div>");
+            $this->session->set_userdata("soal_msg", "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Data gagal dihapus.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             redirect($_SERVER['HTTP_REFERER']);
         }
     }
@@ -510,10 +510,10 @@ class Admin extends CI_Controller
         $where = array('gelombang' => $gelombang, 'tgl_tes' => $tgltes, 'active' => $aktifkan, 'created' => date('Y-m-d'));
         $cekinput = $this->my_model->tambahdata("jadwal", $where);
         if ($cekinput === TRUE) {
-            $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Berhasil Disimpan!!</div></div>");
+            $this->session->set_userdata("jadwal_msg", "<div class='alert alert-success alert-dismissible fade show' role='alert'>Jadwal berhasil disimpan.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             redirect('admin/jadwal');
         } else {
-            $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Gagal Disimpan!!</div></div>");
+            $this->session->set_userdata("jadwal_msg", "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Jadwal gagal disimpan.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             redirect('admin/jadwal');
         }
     }
@@ -525,10 +525,10 @@ class Admin extends CI_Controller
         $where = array('id' => $IDSET);
         $hapussoal = $this->my_model->hapus("jadwal", $where);
         if ($hapussoal) {
-            $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Berhasil Dihapus!!</div></div>");
+            $this->session->set_userdata("jadwal_msg", "<div class='alert alert-success alert-dismissible fade show' role='alert'>Jadwal berhasil dihapus.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             redirect($_SERVER['HTTP_REFERER']);
         } else {
-            $this->session->set_flashdata("msg", "<br/><div class='card bg-warning text-white shadow mb-2'><div class='card-body'>Data Gagal Dihapus!!</div></div>");
+            $this->session->set_userdata("jadwal_msg", "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Jadwal gagal dihapus.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             redirect($_SERVER['HTTP_REFERER']);
         }
     }
@@ -543,11 +543,11 @@ class Admin extends CI_Controller
         $whereid = array('id' => $IDSET);
         $tampiljadwal = $this->my_model->cek_data("jadwal", $whereid);
         $data['datajadwal'] = $tampiljadwal->result();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/editjadwal', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/editjadwal_v2', $data);
+        $this->load->view('templates_v2/footer');
     }
 
     public function aturpeserta()

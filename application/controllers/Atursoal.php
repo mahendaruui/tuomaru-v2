@@ -30,10 +30,10 @@ class Atursoal extends CI_Controller
     $datainput = array('kat' => $katsoal, 'soal' => $pertanyaan, 'opsi_a' => $jawabana, 'opsi_b' => $jawabanb, 'opsi_c' => $jawabanc, 'opsi_d' => $jawaband, 'opsi_e' => $jawabane, 'jawaban' => $kuncijwb, 'pembahasan' => $bahas, 'tgl_input' => date("Y-m-d H:i:s"));
     $cekinput = $this->my_model->tambahdata("m_soal", $datainput);
     if ($cekinput) {
-      $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Berhasil Disimpan!!</div></div>");
+      $this->session->set_userdata("soal_msg", "<div class='alert alert-success alert-dismissible fade show' role='alert'>Soal berhasil disimpan.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
       redirect('admin/viewsoal');
     } else {
-      $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Gagal Disimpan!!</div></div>");
+      $this->session->set_userdata("soal_msg", "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Soal gagal disimpan.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
       redirect('admin/viewsoal');
     }
   }
@@ -59,10 +59,10 @@ class Atursoal extends CI_Controller
     $data = array('kat' => $kat_soal, 'soal' => $pertanyaan, 'opsi_a' => $jawabana, 'opsi_b' => $jawabanb, 'opsi_c' => $jawabanc, 'opsi_d' => $jawaband, 'opsi_e' => $jawabane, 'jawaban' => $kuncijwb, 'pembahasan' => $bahas, 'tgl_input' => date("Y-m-d H:i:s"));
     $cekinput = $this->my_model->update("m_soal", $whereid, $data);
     if ($cekinput) {
-      $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Berhasil diupdate!!</div></div>");
+      $this->session->set_userdata("soal_msg", "<div class='alert alert-success alert-dismissible fade show' role='alert'>Soal berhasil diupdate.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
       redirect('admin/viewsoal');
     } else {
-      $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Gagal diupdate!!</div></div>");
+      $this->session->set_userdata("soal_msg", "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Soal gagal diupdate.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
       redirect('admin/viewsoal');
     }
   }
@@ -89,10 +89,10 @@ class Atursoal extends CI_Controller
     $data = array('tgl_tes' => $updujian, 'active' => $aktifkan);
     $cekinput = $this->my_model->update("jadwal", $whereid, $data);
     if ($cekinput) {
-      $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Berhasil diupdate!!</div></div>");
+      $this->session->set_userdata("jadwal_msg", "<div class='alert alert-success alert-dismissible fade show' role='alert'>Jadwal berhasil diupdate.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
       redirect('admin/jadwal');
     } else {
-      $this->session->set_flashdata("msg", "<br/><div class='card bg-success text-white shadow mb-2'><div class='card-body'>Data Gagal diupdate!!</div></div>");
+      $this->session->set_userdata("jadwal_msg", "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Jadwal gagal diupdate.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
       redirect('admin/jadwal');
     }
   }

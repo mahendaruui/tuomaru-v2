@@ -18,7 +18,9 @@ if (!empty($jadwaltes)) {
         </button>
     </div>
 
-    <?= $this->session->flashdata('msg'); ?>
+    <?php $__msg = $this->session->userdata('jadwal_msg'); if ($__msg) : $this->session->unset_userdata('jadwal_msg'); ?>
+        <?= $__msg; ?>
+    <?php endif; ?>
 
     <div class="v2-card">
         <?php if (empty($jadwaltes)) : ?>

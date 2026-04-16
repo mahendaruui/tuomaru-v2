@@ -23,7 +23,9 @@ $categoryMap = [
         </a>
     </div>
 
-    <?= $this->session->flashdata('msg'); ?>
+    <?php $__msg = $this->session->userdata('soal_msg'); if ($__msg) : $this->session->unset_userdata('soal_msg'); ?>
+        <?= $__msg; ?>
+    <?php endif; ?>
 
     <div class="v2-card">
         <?php if (empty($soal)) : ?>
