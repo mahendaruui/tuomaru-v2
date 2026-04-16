@@ -1,51 +1,68 @@
-<div class="container">
-
-    <!-- Outer Row -->
-    <div class="row justify-content-center">
-
-        <div class="col-lg-7">
-
-            <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="card-body p-0">
-                    <!-- Nested Row within Card Body -->
-                    <div class="row">
-                        <div class="col-lg">
-                            <div class="p-5">
-                                <div class="text-center">
-                                    <img src="<?= base_url('assets/img/uuilogo.png'); ?>" width="200px" alt="Logo SIPENMARU UUI" class="img-fluid mb-4">
-                                    <h1 class="h4 text-gray-900 mb-4">Sistem Ujian Online SIPENMARU UUI</h1>
-                                </div>
-                                <hr class="mb-4">
-                                <?= $this->session->flashdata('message'); ?>
-
-                                <form class="user" method="post" action="<?= base_url('auth'); ?>">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Enter Email Address..." value="<?= set_value('email'); ?>">
-                                        <?= form_error('email', '<small class="text-danger pl-3">', '</small>'); ?>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password">
-                                        <?= form_error('password', '<small class="text-danger pl-3">', '</small>'); ?>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
-                                        Login
-                                    </button>
-                                </form>
-                                <!-- <hr> -->
-                                <!-- <div class="text-center">-->
-                                <!--    <a class="small" href="<?= base_url('auth/forgotpassword'); ?>">Forgot Password?</a>-->
-                                <!--</div>-->
-                                <!--<div class="text-center">-->
-                                <!--    <a class="small" href="<?= base_url('auth/registration'); ?>">Create an Account!</a>-->
-                                <!--</div>-->
-                            </div>
-                        </div>
-                    </div>
+<section class="auth-login">
+    <div class="auth-login__card">
+        <aside class="auth-brand">
+            <div>
+                <div class="auth-brand__crest">
+                    <img src="<?= base_url('assets/img/uuilogo.png'); ?>" alt="Logo SIPENMARU UUI">
                 </div>
+                <p class="auth-brand__eyebrow">Universitas Ubudiyah Indonesia</p>
+                <h1 class="auth-brand__title">Panel Admin Sistem Ujian Online</h1>
+                <p class="auth-brand__text">Masuk ke area pengelolaan peserta, bank soal, jadwal tes, dan hasil ujian dalam satu panel kerja yang sudah diperbarui.</p>
             </div>
 
+            <div class="auth-brand__stats">
+                <div class="auth-brand__stat">
+                    <strong>Admin</strong>
+                    <span>Pengelolaan data peserta dan ujian</span>
+                </div>
+                <div class="auth-brand__stat">
+                    <strong>Terpusat</strong>
+                    <span>Jadwal, soal, dan hasil tes</span>
+                </div>
+                <div class="auth-brand__stat">
+                    <strong>Aman</strong>
+                    <span>Autentikasi akun admin aktif</span>
+                </div>
+            </div>
+        </aside>
+
+        <div class="auth-panel">
+            <div class="auth-panel__inner">
+                <p class="auth-panel__eyebrow">Login Admin</p>
+                <h2 class="auth-panel__title">Masuk ke dashboard</h2>
+                <p class="auth-panel__text">Gunakan email dan password admin yang sudah terdaftar untuk mengakses panel pengelolaan ujian.</p>
+
+                <div class="auth-alert">
+                    <?= $this->session->flashdata('message'); ?>
+                </div>
+
+                <form method="post" action="<?= base_url('auth'); ?>">
+                    <div class="auth-field">
+                        <label class="auth-label" for="email">Email</label>
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-envelope"></i>
+                            <input type="text" class="auth-input" id="email" name="email" placeholder="nama@email.com" value="<?= set_value('email'); ?>" autocomplete="username">
+                        </div>
+                        <?= form_error('email', '<small class="auth-error">', '</small>'); ?>
+                    </div>
+
+                    <div class="auth-field">
+                        <label class="auth-label" for="password">Password</label>
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" class="auth-input" id="password" name="password" placeholder="Masukkan password" autocomplete="current-password">
+                        </div>
+                        <?= form_error('password', '<small class="auth-error">', '</small>'); ?>
+                    </div>
+
+                    <button type="submit" class="auth-submit">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </button>
+                </form>
+
+                <p class="auth-note">Akses ini ditujukan untuk administrator sistem ujian. Jika Anda peserta tes, gunakan portal peserta yang sesuai.</p>
+            </div>
         </div>
-
     </div>
-
-</div>
+</section>

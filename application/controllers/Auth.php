@@ -26,6 +26,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Sistem Ujian Online SIPENMARU UUI';
+            $data['auth_body_class'] = 'auth-shell';
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/login');
             $this->load->view('templates/auth_footer');
