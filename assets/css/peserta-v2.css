@@ -179,6 +179,115 @@
     border: 1px solid rgba(60, 125, 87, 0.18);
 }
 
+/* Redirect ujian page */
+
+.peserta-dashboard--ujian {
+    max-width: 1240px;
+}
+
+.exam-session-head {
+    padding: 24px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(255, 250, 242, 0.98), rgba(247, 240, 226, 0.94));
+    border: 1px solid var(--peserta-border);
+    box-shadow: 0 14px 30px rgba(18, 34, 31, 0.1);
+}
+
+.exam-timer-wrap {
+    margin-top: 14px;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: rgba(22, 54, 53, 0.08);
+}
+
+.exam-timer-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--peserta-muted);
+    font-weight: 800;
+}
+
+.exam-questions-wrap {
+    margin-top: 18px;
+    display: grid;
+    gap: 16px;
+}
+
+.question-stack {
+    display: grid;
+    gap: 14px;
+}
+
+.question-card {
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid var(--peserta-border);
+    background: #fffdf8;
+}
+
+.question-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.question-num {
+    font-weight: 800;
+    color: var(--peserta-panel);
+}
+
+.question-id {
+    font-size: 0.78rem;
+    color: var(--peserta-muted);
+}
+
+.question-text {
+    color: var(--peserta-ink);
+    line-height: 1.75;
+    margin-bottom: 12px;
+}
+
+.question-options {
+    display: grid;
+    gap: 8px;
+}
+
+.option-item {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid rgba(24, 35, 32, 0.08);
+    border-radius: 12px;
+    background: rgba(255, 250, 242, 0.8);
+    cursor: pointer;
+}
+
+.option-item input {
+    margin-top: 2px;
+}
+
+.finish-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.finish-wrap .start-btn {
+    max-width: 320px;
+    text-align: center;
+    text-decoration: none;
+}
+
 @media (max-width: 991.98px) {
     .peserta-hero {
         grid-template-columns: 1fr;
@@ -186,6 +295,11 @@
 
     .peserta-grid {
         grid-template-columns: 1fr;
+    }
+
+    .question-card__head {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 

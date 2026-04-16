@@ -113,6 +113,7 @@ class Dashboard extends CI_Controller
           $kirimHasil = $this->my_model->cek_data("m_soal a", $where)->result();
           $data['datatesoke'] = $kirimHasil;
           $data['disablebtn'] = 1;
+          $data['wktmundurtes'] = '';
 
           $this->db->join('pendaftar b', 'b.sesi = a.gelombang');
           $countingtimetes = $this->my_model->cek_data("jadwal a", $where)->result();

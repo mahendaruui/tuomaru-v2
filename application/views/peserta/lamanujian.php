@@ -1,154 +1,91 @@
 <script src="<?= base_url() ?>/assets/js/jqueryqore.js"></script>
 <script src="<?= base_url() ?>/assets/js/jquery.countdown.js"></script>
-<?php foreach ($peserta as $p) : ?>
+<?php $p = !empty($peserta) ? $peserta[0] : null; ?>
 
-  <div class="container">
-    <div class="card-body">
-      <h4 class="card-title">Halaman Ujian Online</h4>
-      <h2 class="mt-2 mx-auto text-center alert alert-primary">Semoga Sukses, <Span class="font-bold"><?= strtoupper($p->nama); ?>!</Span></h2>
-
-      <hr>
-      <div class="alert alert-warning">
-        <div class="h3 text-center mb-3">
-          <h4>Perhatian: Kerjakan soal dengan memilih salah satu jawaban pada pilihan jawaban yang telah disediakan.</h4>
-          <h4>Waktu anda 2 Jam dari jadwal yang telah ditentukan</h4>
-          <br>
-          <div id="tesmundur" class="text-center"></div>
-        </div>
-      </div>
+<section class="peserta-dashboard peserta-dashboard--ujian">
+  <div class="exam-session-head">
+    <p class="peserta-eyebrow">Sesi Ujian Sedang Berlangsung</p>
+    <h2 class="peserta-name">Semoga Sukses, <?= !empty($p) ? strtoupper($p->nama) : 'PESERTA'; ?>!</h2>
+    <p class="peserta-meta">Kerjakan soal dengan tenang. Jawaban akan tersimpan otomatis saat Anda memilih opsi.</p>
+    <div class="exam-timer-wrap">
+      <span class="exam-timer-label">Sisa Waktu</span>
+      <div id="tesmundur" class="exam-countdown"></div>
     </div>
-    <hr>
-    <!-- area soal -->
-    <div class="card">
-      <div class="card-body wizard-content">
-        <h4 class="card-title alert alert-warning">Pilih jawaban yang anda anggap benar! </h4>
-        <form id="example-form" action="<?= base_url('dashboard/liveTesAns') ?>" class="m-t-40" method="post">
-          <div>
-            <?php $no = 1; ?>
-            <?php foreach ($datatesoke as $s) : ?>
-              <!-- <h5></h5> -->
-              <section class="mb-3" style="border: 1px solid #ccc; padding: 10px;">
-                <label>Pertanyaan : <?= $no ?></label>
-                <p><?php echo $s->soal; ?></p>
-                <input type="text" name="idsoal" hidden value="<?= $s->id ?>">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">
-                      <input type="radio" value="<?= $s->id ?>-A" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == "A" ? 'checked="checked"' : ''); ?> />
-                    </div>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Text input with radio button" disabled placeholder="A. <?php echo $s->opsi_a; ?>">
-                </div>
-
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">
-                      <input type="radio" value="<?= $s->id ?>-B" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == "B" ? 'checked="checked"' : ''); ?> />
-                    </div>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Text input with radio button" disabled placeholder="B. <?php echo $s->opsi_b; ?>">
-                </div>
-
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">
-                      <input type="radio" value="<?= $s->id ?>-C" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == "C" ? 'checked="checked"' : ''); ?> />
-                    </div>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Text input with radio button" disabled placeholder="C. <?php echo $s->opsi_c; ?>">
-                </div>
-
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">
-                      <input type="radio" value="<?= $s->id ?>-D" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == "D" ? 'checked="checked"' : ''); ?> />
-                    </div>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Text input with radio button" disabled placeholder="D. <?php echo $s->opsi_d; ?>">
-                </div>
-
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">
-                      <input type="radio" value="<?= $s->id ?>-E" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == "E" ? 'checked="checked"' : ''); ?> />
-                    </div>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Text input with radio button" disabled placeholder="E. <?php echo $s->opsi_e; ?>">
-                </div>
-              </section>
-              <?php $no++; ?>
-            <?php endforeach; ?>
-          </div>
-          <div class="text-center mt-4 mb-4">
-            <a href="<?= base_url('dashboard/selesai') ?>" class="btn btn-lg btn-success" onclick="return confirm('Apakah Anda yakin ingin menyelesaikan ujian? Pastikan semua jawaban sudah terisi.')">
-              <i class="fas fa-check-circle mr-2"></i> Selesaikan Ujian
-            </a>
-          </div>
-        </form>
-      </div>
-    </div>
+    <p class="exam-note ket">Waktu ujian 2 jam dari jadwal yang telah ditentukan.</p>
   </div>
 
-<?php endforeach; ?>
+  <div class="exam-questions-wrap">
+    <div class="peserta-card">
+      <h3>Daftar Soal Ujian</h3>
+      <p>Pilih salah satu jawaban A sampai E pada setiap pertanyaan.</p>
+    </div>
 
-<!-- this page js -->
-<script src="<?= base_url() ?>/vendor/matrix_admin/assets/libs/jquery-steps/build/jquery.steps.min.js"></script>
-<script src="<?= base_url() ?>/vendor/matrix_admin/assets/libs/jquery-validation/dist/jquery.validate.min.js"></script>
+    <div class="question-stack">
+      <?php $no = 1; foreach ($datatesoke as $s) : ?>
+      <article class="question-card">
+        <div class="question-card__head">
+          <span class="question-num">Pertanyaan <?= $no; ?></span>
+          <span class="question-id">ID: <?= $s->id; ?></span>
+        </div>
+        <div class="question-text"><?= $s->soal; ?></div>
+
+        <div class="question-options">
+          <label class="option-item">
+            <input type="radio" value="<?= $s->id ?>-A" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == 'A' ? 'checked="checked"' : ''); ?> />
+            <span><strong>A.</strong> <?= htmlspecialchars($s->opsi_a); ?></span>
+          </label>
+          <label class="option-item">
+            <input type="radio" value="<?= $s->id ?>-B" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == 'B' ? 'checked="checked"' : ''); ?> />
+            <span><strong>B.</strong> <?= htmlspecialchars($s->opsi_b); ?></span>
+          </label>
+          <label class="option-item">
+            <input type="radio" value="<?= $s->id ?>-C" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == 'C' ? 'checked="checked"' : ''); ?> />
+            <span><strong>C.</strong> <?= htmlspecialchars($s->opsi_c); ?></span>
+          </label>
+          <label class="option-item">
+            <input type="radio" value="<?= $s->id ?>-D" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == 'D' ? 'checked="checked"' : ''); ?> />
+            <span><strong>D.</strong> <?= htmlspecialchars($s->opsi_d); ?></span>
+          </label>
+          <label class="option-item">
+            <input type="radio" value="<?= $s->id ?>-E" name="jwb[<?= $s->id ?>]" <?= ($s->jwb == 'E' ? 'checked="checked"' : ''); ?> />
+            <span><strong>E.</strong> <?= htmlspecialchars($s->opsi_e); ?></span>
+          </label>
+        </div>
+      </article>
+      <?php $no++; endforeach; ?>
+    </div>
+
+    <div class="finish-wrap">
+      <a href="<?= base_url('dashboard/selesai') ?>" class="start-btn" onclick="return confirm('Apakah Anda yakin ingin menyelesaikan ujian? Pastikan semua jawaban sudah terisi.')">
+        <i class="fas fa-check-circle mr-2"></i> Selesaikan Ujian
+      </a>
+    </div>
+  </div>
+</section>
 
 <script>
-  var hitung = '<?= $wktmundurtes ?>';
-  $('#tesmundur').countdown(hitung)
-    .on('update.countdown', function(event) {
-      var format = '%H:%M:%S';
-      if (event.offset.totalDays > 0) {
-        format = '%-d day%!d ' + format;
-      }
-      if (event.offset.weeks > 0) {
-        format = '%-w week%!w ' + format;
-      }
-      $(this).html(event.strftime(format));
-    })
-    .on('finish.countdown', function(event) {
-      $("#btnstart").append(`<form action="<?= base_url('dashboard/lamanUjian') ?>"><button class="btn btn-lg btn-block btn-primary" id="ts-success">Start!</button></form>`);
-      $(".ket").html('');
-      $(".ket").append(`<h4 class="text-danger">Klik tombol 'Start' untuk memulai ujian</h4>`);
-      $("#clock").remove();
-      window.location.replace("<?= base_url('dashboard/selesai') ?>");
-
-    });
-</script>
-
-<script>
-  // Basic Example with form
-  var form = $("#example-form");
-  form.validate({
-    errorPlacement: function errorPlacement(error, element) {
-      element.before(error);
-    },
-    rules: {
-      confirm: {
-        equalTo: "#password"
-      }
+  (function() {
+    var hitung = '<?= isset($wktmundurtes) ? $wktmundurtes : ''; ?>';
+    if (!hitung) {
+      return;
     }
-  });
 
-  form.children("div").steps({
-    headerTag: "h5",
-    bodyTag: "section",
-    transitionEffect: "slideLeft",
-    onStepChanging: function(event, currentIndex, newIndex) {
-      form.validate().settings.ignore = ":disabled,:hidden";
-      return form.valid();
-    },
-    onFinishing: function(event, currentIndex) {
-      form.validate().settings.ignore = ":disabled";
-      return form.valid();
-    },
-    onFinished: function(event, currentIndex) {
-      alert("Terima kasih!!");
-      window.location.replace("<?= base_url('dashboard/selesai') ?>");
-    }
-  });
+    $('#tesmundur').countdown(hitung)
+      .on('update.countdown', function(event) {
+        var format = '%H:%M:%S';
+        if (event.offset.totalDays > 0) {
+          format = '%-d day%!d ' + format;
+        }
+        if (event.offset.weeks > 0) {
+          format = '%-w week%!w ' + format;
+        }
+        $(this).html(event.strftime(format));
+      })
+      .on('finish.countdown', function() {
+        $('.ket').html('<strong>Waktu ujian telah berakhir. Sistem akan mengalihkan ke halaman selesai.</strong>');
+        window.location.replace("<?= base_url('dashboard/selesai') ?>");
+      });
+  })();
 </script>
 
 <script>
