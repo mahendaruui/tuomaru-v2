@@ -1621,6 +1621,153 @@ a:hover {
     font-weight: 800;
 }
 
+.section-head__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.action-btn--warning {
+    background: linear-gradient(135deg, #d4742a, #f0be60);
+    color: #fff7eb;
+    box-shadow: 0 12px 24px rgba(212, 116, 42, 0.24);
+}
+
+.action-btn--warning:hover {
+    color: #fff7eb;
+}
+
+.soal-form-card {
+    padding: 24px;
+}
+
+.soal-form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.95fr);
+    gap: 24px;
+}
+
+.soal-form-main,
+.soal-form-side {
+    display: grid;
+    gap: 20px;
+}
+
+.field-block {
+    display: grid;
+    gap: 8px;
+}
+
+.soal-textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+.soal-textarea--lg {
+    min-height: 260px;
+}
+
+.choice-panel,
+.answer-panel {
+    padding: 20px;
+    border: 1px solid var(--admin-border);
+    border-radius: 24px;
+    background: rgba(255, 252, 247, 0.75);
+}
+
+.choice-panel__head h3 {
+    margin: 0 0 6px;
+    font-size: 1rem;
+    font-family: 'Sora', sans-serif;
+    color: var(--admin-ink);
+}
+
+.choice-panel__head p {
+    margin: 0 0 16px;
+    color: var(--admin-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.choice-list {
+    display: grid;
+    gap: 12px;
+}
+
+.choice-field {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+}
+
+.soal-form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.detail-layout--stack {
+    grid-template-columns: 1fr;
+}
+
+.detail-side-stack--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detail-hero-card--question {
+    padding: 24px 28px;
+}
+
+.question-content,
+.question-explanation {
+    color: var(--admin-ink);
+    line-height: 1.75;
+}
+
+.question-content > *:first-child,
+.question-explanation > *:first-child {
+    margin-top: 0;
+}
+
+.question-content > *:last-child,
+.question-explanation > *:last-child {
+    margin-bottom: 0;
+}
+
+.answer-key-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(60, 125, 87, 0.12);
+    color: var(--admin-success);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.detail-option-list {
+    display: grid;
+    gap: 0;
+    padding: 6px 22px 18px;
+}
+
+.detail-option-row {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(24, 35, 32, 0.06);
+    color: var(--admin-ink);
+    line-height: 1.6;
+}
+
+.detail-option-row:last-child {
+    border-bottom: 0;
+}
+
 /* ── Jadwal tes ─────────────────────────────────────────────── */
 
 .jadwal-table td {
@@ -1695,6 +1842,11 @@ a:hover {
     .detail-layout {
         grid-template-columns: 1fr;
     }
+
+    .soal-form-grid,
+    .detail-side-stack--two {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 991.98px) {
@@ -1744,6 +1896,10 @@ a:hover {
 
     .detail-profile__media {
         justify-content: flex-start;
+    }
+
+    .choice-field {
+        grid-template-columns: 1fr;
     }
 }
 

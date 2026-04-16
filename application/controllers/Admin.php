@@ -409,11 +409,11 @@ class Admin extends CI_Controller
         $data['title'] = 'Form Input Soal Test';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/inputsoal', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/inputsoal_v2', $data);
+        $this->load->view('templates_v2/footer');
     }
 
     public function hapussoal()
@@ -441,11 +441,11 @@ class Admin extends CI_Controller
         $whereid = array('id' => $IDSET);
         $tampilsoal = $this->my_model->cek_data("m_soal", $whereid);
         $data['datasoal'] = $tampilsoal->result();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/editsoal', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/editsoal_v2', $data);
+        $this->load->view('templates_v2/footer');
     }
 
     public function detailsoal()
@@ -457,11 +457,11 @@ class Admin extends CI_Controller
         $whereid = array('id' => $IDSET);
         $tampilsoal = $this->my_model->cek_data("m_soal", $whereid);
         $data['detailsoal'] = $tampilsoal->result();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/detailsoal', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/detailsoal_v2', $data);
+        $this->load->view('templates_v2/footer');
     }
 
     public function detailmember()
