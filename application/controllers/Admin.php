@@ -132,11 +132,11 @@ class Admin extends CI_Controller
         }
         $data['pendaftar'] = $pendaftar->result();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/peserta', $data);
-        $this->load->view('templates/footer');
+    $this->load->view('templates_v2/header', $data);
+    $this->load->view('templates_v2/sidebar', $data);
+    $this->load->view('templates_v2/topbar', $data);
+    $this->load->view('admin/peserta_v2', $data);
+    $this->load->view('templates_v2/footer');
     }
 
     public function downloadTemplatePeserta()

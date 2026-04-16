@@ -1239,6 +1239,179 @@ a:hover {
     border: 1px solid rgba(165, 67, 45, 0.18);
 }
 
+/* ── Import card ────────────────────────────────────────────── */
+
+.import-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.import-card__toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 24px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+}
+
+.import-card__toggle:hover {
+    background: rgba(24, 35, 32, 0.025);
+}
+
+.import-card__toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 0.97rem;
+    color: var(--admin-ink);
+}
+
+.import-card__toggle-label i {
+    color: var(--admin-panel-3);
+}
+
+.import-card__chevron {
+    color: var(--admin-muted);
+    transition: transform 0.22s ease;
+    flex-shrink: 0;
+}
+
+.import-card__body {
+    padding: 0 24px 24px;
+    border-top: 1px solid var(--admin-border);
+}
+
+.import-hint {
+    margin: 16px 0;
+    font-size: 0.88rem;
+    color: var(--admin-muted);
+    line-height: 1.7;
+}
+
+.import-hint i {
+    color: #3a8fc9;
+    margin-right: 4px;
+}
+
+/* File input group */
+
+.v2-file-input-group {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.v2-file-label {
+    flex: 1 1 260px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 2px dashed rgba(22, 54, 53, 0.25);
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--admin-muted);
+    transition: border-color 0.15s ease, background 0.15s ease;
+    background: rgba(24, 35, 32, 0.025);
+    overflow: hidden;
+}
+
+.v2-file-label:hover {
+    border-color: var(--admin-panel-3);
+    background: rgba(46, 102, 98, 0.04);
+    color: var(--admin-ink);
+}
+
+.v2-file-label i {
+    color: var(--admin-panel-3);
+    flex-shrink: 0;
+}
+
+.v2-file-hidden {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* ── Table extras (peserta) ──────────────────────────────────── */
+
+.v2-card__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 12px 22px;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.v2-card__count {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--admin-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.row-num-head {
+    width: 46px;
+    text-align: right;
+}
+
+.ujian-badge {
+    font-family: 'Sora', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--admin-panel);
+    background: rgba(22, 54, 53, 0.07);
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.pass-code {
+    font-family: monospace;
+    font-size: 0.88rem;
+    background: rgba(24, 35, 32, 0.06);
+    color: var(--admin-ink);
+    padding: 2px 7px;
+    border-radius: 5px;
+    letter-spacing: 0.08em;
+}
+
+.gender-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.gender-pill--l {
+    background: rgba(38, 88, 163, 0.1);
+    color: #265aa3;
+}
+
+.gender-pill--p {
+    background: rgba(160, 56, 110, 0.1);
+    color: #a0386e;
+}
+
 @media (max-width: 1199.98px) {
     .metrics-grid,
     .admin-grid-2,
