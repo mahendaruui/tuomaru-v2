@@ -596,11 +596,15 @@ class Admin extends CI_Controller
         $data['tahun'] = isset($kelolaData->tahun) ? $kelolaData->tahun : '';
 
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/aturpeserta', $data);
-        $this->load->view('templates/footer');
+        if (!isset($data['pesertates'])) {
+            $data['pesertates'] = [];
+        }
+
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/aturpeserta_v2', $data);
+        $this->load->view('templates_v2/footer');
     }
 
     public function setpeserta()
@@ -617,21 +621,22 @@ class Admin extends CI_Controller
         $sesigel = $this->input->post('sesigel');
         $gel = $this->input->post('gel');
 
-        if (isset($gel)) {
+        if (!empty($gel)) {
             foreach ($gel as $value) {
                 $data = array('sesi' => $sesigel);
                 $where = array('id' => $value);
                 $ceksql = $this->db->update('pendaftar', $data, $where);
             }
             if ($ceksql) {
+                $this->session->set_userdata('aturpeserta_msg', "<div class='alert alert-success alert-dismissible fade show' role='alert'>Peserta berhasil ditambahkan ke gelombang.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
                 redirect('admin/aturpeserta/' . $sesigel);
-                // echo "berhasil";
             } else {
-                redirect('admin/aturpeserta' . $sesigel);
-                // echo "gagal";
+                $this->session->set_userdata('aturpeserta_msg', "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Peserta gagal ditambahkan ke gelombang.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
+                redirect('admin/aturpeserta/' . $sesigel);
             }
         } else {
-            echo "kesalahan teknik";
+            $this->session->set_userdata('aturpeserta_msg', "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Tidak ada peserta yang dipilih.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
+            redirect('admin/aturpeserta/' . $sesigel);
         }
     }
 
@@ -643,22 +648,21 @@ class Admin extends CI_Controller
         $sesigel = $this->input->post('sesigel');
         $gel = $this->input->post('gel');
 
-        if (isset($gel)) {
+        if (!empty($gel)) {
             foreach ($gel as $value) {
-                $id = substr($value, 0, -1);
                 $data = array('sesi' => NULL);
-                $where = array('id' => $id);
+                $where = array('id' => $value);
                 $ceksql = $this->db->update('pendaftar', $data, $where);
             }
 
             if ($this->db->affected_rows() > 0) {
-                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menghapus peserta dari gelombang</div>');
+                $this->session->set_userdata('aturpeserta_msg', "<div class='alert alert-success alert-dismissible fade show' role='alert'>Peserta berhasil dihapus dari gelombang.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menghapus peserta dari gelombang</div>');
+                $this->session->set_userdata('aturpeserta_msg', "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Peserta gagal dihapus dari gelombang.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             }
             redirect('admin/aturpeserta/' . $sesigel);
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak ada peserta yang dipilih</div>');
+            $this->session->set_userdata('aturpeserta_msg', "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Tidak ada peserta yang dipilih.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
             redirect('admin/aturpeserta/' . $sesigel);
         }
     }
