@@ -1621,6 +1621,70 @@ a:hover {
     font-weight: 800;
 }
 
+/* ── Jadwal tes ─────────────────────────────────────────────── */
+
+.jadwal-table td {
+    vertical-align: middle;
+}
+
+.gelombang-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(22, 54, 53, 0.08);
+    color: var(--admin-panel);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.schedule-time {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: rgba(24, 35, 32, 0.05);
+    color: var(--admin-ink);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.status-pill--active {
+    background: rgba(60, 125, 87, 0.12);
+    color: var(--admin-success);
+}
+
+.status-pill--inactive {
+    background: rgba(165, 67, 45, 0.08);
+    color: var(--admin-danger);
+}
+
+.v2-form-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.v2-form-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.v2-toggle--field {
+    min-height: 44px;
+}
+
 @media (max-width: 1199.98px) {
     .metrics-grid,
     .admin-grid-2,
