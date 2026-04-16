@@ -10,8 +10,8 @@
   </div>
 
   <!-- Flash Message -->
-  <?php if ($this->session->flashdata('msg')) : ?>
-    <?= $this->session->flashdata('msg') ?>
+  <?php $__msg = $this->session->userdata('import_msg'); if ($__msg): $this->session->unset_userdata('import_msg'); ?>
+    <?= $__msg ?>
   <?php endif; ?>
 
   <!-- Upload CSV Card -->

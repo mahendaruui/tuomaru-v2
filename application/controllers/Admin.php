@@ -383,7 +383,7 @@ class Admin extends CI_Controller
             $msg .= '</ul>';
         }
 
-        $this->session->set_flashdata('msg', "<div class='alert alert-$type'>$msg</div>");
+        $this->session->set_userdata('import_msg', "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>{$msg}<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
         redirect('admin/viewpeserta');
     }
 
