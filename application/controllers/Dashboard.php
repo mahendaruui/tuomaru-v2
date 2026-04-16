@@ -193,7 +193,6 @@ class Dashboard extends CI_Controller
         'no_ujian' => $no_ujian,
         'jwb_b' => $hasilBenar,
         'jwb_s' => $hasilSalah,
-        'nilai' => $score,
         'status' => 'X'
       );
       $this->my_model->tambahdata("nilaites", $datasink);
@@ -202,8 +201,7 @@ class Dashboard extends CI_Controller
       $whereUpdate = array('no_ujian' => $no_ujian);
       $dataSinkUp = array(
         'jwb_b' => $hasilBenar,
-        'jwb_s' => $hasilSalah,
-        'nilai' => $score
+        'jwb_s' => $hasilSalah
       );
       $this->my_model->update("nilaites", $whereUpdate, $dataSinkUp);
     }

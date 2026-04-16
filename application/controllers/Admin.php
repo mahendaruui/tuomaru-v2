@@ -675,6 +675,11 @@ class Admin extends CI_Controller
         ];
 
         foreach ($ceknilaisiswa as $hasil) {
+            $benar = (int) $hasil->jwb_b;
+            $salah = (int) $hasil->jwb_s;
+            $total = $benar + $salah;
+            $hasil->nilai = $total > 0 ? (int) round(($benar / $total) * 100) : 0;
+
             if ($hasil->status === 'Y') {
                 $hasilSummary['lulus']++;
             } elseif ($hasil->status === 'N') {
@@ -747,7 +752,6 @@ class Admin extends CI_Controller
                     'no_ujian' => $PesertaTes,
                     'jwb_b' => $hasilBenar,
                     'jwb_s' => $hasilSalah,
-                    'nilai' => $score,
                     'status' => 'X'
                 );
                 $this->my_model->tambahdata("nilaites", $datasink);
@@ -756,8 +760,7 @@ class Admin extends CI_Controller
                 $whereUpdate = array('no_ujian' => $PesertaTes);
                 $dataSinkUp = array(
                     'jwb_b' => $hasilBenar,
-                    'jwb_s' => $hasilSalah,
-                    'nilai' => $score
+                    'jwb_s' => $hasilSalah
                 );
                 $this->my_model->update("nilaites", $whereUpdate, $dataSinkUp);
             }
