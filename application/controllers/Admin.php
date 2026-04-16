@@ -396,11 +396,11 @@ class Admin extends CI_Controller
         $tampilsoal = $this->my_model->tampil("m_soal");
         $data['soal'] = $tampilsoal->result();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/soal', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/soal_v2', $data);
+        $this->load->view('templates_v2/footer');
     }
 
     public function tambahsoal()

@@ -1562,6 +1562,65 @@ a:hover {
     line-height: 1.5;
 }
 
+/* ── Bank soal ──────────────────────────────────────────────── */
+
+.soal-table td {
+    vertical-align: top;
+}
+
+.soal-cat-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(212, 116, 42, 0.12);
+    color: #a3531c;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.soal-preview {
+    min-width: 260px;
+    max-width: 440px;
+    color: var(--admin-ink);
+    line-height: 1.7;
+}
+
+.option-stack {
+    display: grid;
+    gap: 8px;
+    min-width: 260px;
+}
+
+.option-row {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(24, 35, 32, 0.06);
+}
+
+.option-row:last-child {
+    border-bottom: 0;
+}
+
+.option-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--admin-panel);
+    color: #fff7eb;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
 @media (max-width: 1199.98px) {
     .metrics-grid,
     .admin-grid-2,
