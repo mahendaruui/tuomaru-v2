@@ -79,6 +79,8 @@ Ada **dua sistem login terpisah** yang berjalan bersamaan.
 | `/admin/viewpeserta` | `Admin::viewpeserta()` | Daftar peserta gelombang terkini |
 | `/admin/detailmember/{id}` | `Admin::detailmember()` | Detail peserta |
 | `/admin/aturpeserta/{gel}` | `Admin::aturpeserta()` | Atur peserta per gelombang |
+| `/admin/downloadTemplatePeserta` | `Admin::downloadTemplatePeserta()` | Download template Excel (.xlsx) untuk import peserta |
+| `/admin/importPeserta` | `Admin::importPeserta()` POST | Upload & import data peserta dari file .xlsx/.xls/.csv |
 | `/admin/viewsoal` | `Admin::viewsoal()` | Daftar bank soal |
 | `/admin/tambahsoal` | `Admin::tambahsoal()` | Form tambah soal |
 | `/admin/editsoal/{id}` | `Admin::editsoal()` | Form edit soal |
@@ -129,7 +131,9 @@ Ada **dua sistem login terpisah** yang berjalan bersamaan.
 | `role()` | List semua role |
 | `roleAccess($role_id)` | Tampil/toggle akses menu per role |
 | `changeAccess()` | Toggle entry `user_access_menu` |
-| `viewpeserta()` | List peserta gelombang terkini |
+| `viewpeserta()` | List peserta: filter by `id_jdwl` terkini, fallback tampil semua jika belum ada jadwal |
+| `downloadTemplatePeserta()` | Generate & download template `.xlsx` (PhpSpreadsheet): Sheet 1 "Template Data" 16 kolom + Sheet 2 "Referensi Prodi" |
+| `importPeserta()` | Upload file `.xlsx/.xls/.csv`, parse dengan PhpSpreadsheet, insert ke `pendaftar`. Skip duplikat. Password acak 5 karakter (A-Z0-9) |
 | `viewsoal()` | List semua soal di `m_soal` |
 | `tambahsoal()` | Form tambah soal (TinyMCE) |
 | `hapussoal($id)` | Hapus soal |
@@ -202,7 +206,7 @@ Digunakan oleh semua controller sebagai model utama.
 ### Tabel Utama Ujian
 | Tabel | Kolom Penting | Keterangan |
 |-------|---------------|------------|
-| `pendaftar` | `no_ujian`, `pass`, `nama`, `sesi`, `id_jdwl`, `hadir_tulis`, `tes_tulis`, `foto` | Data peserta/mahasiswa pendaftar |
+| `pendaftar` | `no_ujian`, `pass`, `nama`, `tempat`, `tanggal`, `jenkel`, `email`, `hp`, `no_identitas`, `asal_sekolah`, `agama`, `alamat`, `alamat_desa`, `alamat_kec`, `alamat_kota`, `alamat_prov`, `sesi`, `id_jdwl`, `hadir_tulis`, `tes_tulis`, `foto` | Data peserta/mahasiswa pendaftar |
 | `m_soal` | `id`, `kat`, `soal`, `opsi_a–e`, `jawaban`, `pembahasan`, `bobot`, `file` | Bank soal (MCQ, 5 opsi) |
 | `hasil_tes` | `id`, `no_ujian`, `id_soal`, `jwb` | Jawaban per peserta per soal |
 | `nilaites` | `no_ujian`, `jwb_b`, `jwb_s`, `nilai`, `status` | Hasil skor ujian (benar, salah, nilai) |
@@ -342,6 +346,7 @@ views/
 | Chart.js | `assets/vendor/chart.js/` | Grafik dashboard |
 | TinyMCE | `tinymce/` | Rich text editor untuk input soal |
 | jQuery Countdown | `assets/js/jquery.countdown.min.js` | Timer ujian |
+| PhpSpreadsheet 2.4.4 | `vendor/phpoffice/phpspreadsheet/` | Generate & baca file Excel (.xlsx/.xls/.csv) |
 
 ---
 
@@ -360,12 +365,60 @@ views/
 ### `application/config/routes.php`
 - Default route: `$route['default_controller'] = 'login';`
 
+### `composer.json` / `composer.lock`
+- Dependency manager: Composer 2.x
+- Require: `phpoffice/phpspreadsheet ^2.1`, PHP `>=7.4`
+- Autoload: `vendor/autoload.php` di-require manual di controller yang butuh
+- `vendor/` dikecualikan dari git (`.gitignore`)
+
 ### `php.ini` (di root project)
 - Memory limit disesuaikan untuk query besar dari tabel `pendaftar`
 
 ---
 
-## 11. Known Issues & Catatan
+## 11. Template Import Excel (`downloadTemplatePeserta`)
+
+File `.xlsx` dua sheet yang di-generate oleh PhpSpreadsheet:
+
+### Sheet 1 — Template Data
+| Kolom | Label | Field DB (`pendaftar`) |
+|-------|-------|------------------------|
+| A | Nomor Ujian | `no_ujian` |
+| B | Nama Lengkap | `nama` |
+| C | Tempat Lahir | `tempat` |
+| D | Tanggal Lahir (YYYY-MM-DD) | `tanggal` |
+| E | Jenis Kelamin (L/P) | `jenkel` |
+| F | Email | `email` |
+| G | No. HP | `hp` |
+| H | NIK (No. Identitas) | `no_identitas` |
+| I | Asal Sekolah | `asal_sekolah` |
+| J | Agama | `agama` |
+| K | Alamat | `alamat` |
+| L | Desa | `alamat_desa` |
+| M | Kecamatan | `alamat_kec` |
+| N | Kota/Kabupaten | `alamat_kota` |
+| O | Provinsi | `alamat_prov` |
+| P | Kode Program Studi | *(diabaikan saat import)* |
+
+### Sheet 2 — Referensi Prodi
+Berisi data prodi aktif dari tabel `prodi`: Kode, Nama Program Studi, Fakultas.
+
+### Alur Import
+```
+1. Admin download template via /admin/downloadTemplatePeserta
+2. Isi data peserta (kolom A-O wajib untuk no_ujian & nama)
+3. Upload via form di halaman Peserta (accept: .xlsx, .xls, .csv)
+4. POST ke /admin/importPeserta
+   - Validasi: no_ujian + nama tidak boleh kosong
+   - Validasi: jenkel harus L, P, atau kosong
+   - Skip duplikat no_ujian
+   - Password di-generate acak 5 karakter (A-Z + 0-9)
+5. Flash message menampilkan jumlah berhasil/dilewati
+```
+
+---
+
+## 12. Known Issues & Catatan
 
 | Issue | Lokasi | Status |
 |-------|--------|--------|
@@ -375,3 +428,5 @@ views/
 | Memory exhausted pada query besar | `DB_driver.php` line 654 | Perlu optimasi query / pagination |
 | cPanel handler di `.htaccess` | `.htaccess` | ✅ Sudah diperbaiki |
 | Tabel `users` vs `user` — dua tabel user berbeda | DB | ⚠️ Perlu konsolidasi |
+| Kolom P (Kode Program Studi) di template Excel diabaikan saat import | `Admin::importPeserta()` | ⏳ Belum diimplementasi |
+| Password peserta disimpan plain text | `pendaftar.pass` | ⚠️ Perlu di-hash |
