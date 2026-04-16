@@ -1,49 +1,41 @@
-<?php if (!isset($disablebtn)) : ?>
-  <li class="navbar navbar-expand-lg navbar navbar-dark bg-primary justify-content-between">
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-      <img src="<?= base_url('assets/img/uuilogo.png'); ?>" width="150px" alt="Logo SIPENMARU UUI" class="img-fluid mb-2">
-      <a class="navbar-brand" href="<?= base_url('dashboard') ?>" style="margin-top: 0; text-align: center;">Sistem Ujian Online Universitas Ubudiyah Indonesia</a>
-    </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+<?php
+$segment2 = $this->uri->segment(2);
+$isDashboard = empty($segment2);
+$isProfil = $segment2 === 'profil';
+?>
+
+<header class="peserta-topbar-wrap">
+  <nav class="navbar navbar-expand-lg peserta-topbar">
+    <a class="peserta-brand" href="<?= base_url('dashboard') ?>">
+      <img src="<?= base_url('assets/img/uuilogo.png'); ?>" alt="Logo Universitas Ubudiyah Indonesia" class="peserta-brand__logo">
+      <span class="peserta-brand__text">
+        <strong>Sistem Ujian Online</strong>
+        <small>Universitas Ubudiyah Indonesia</small>
+      </span>
+    </a>
+
+    <button class="navbar-toggler peserta-toggler" type="button" data-toggle="collapse" data-target="#pesertaMainNav" aria-controls="pesertaMainNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="form-inline">
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="<?= base_url('dashboard') ?>">Home <span class="sr-only">(current)</span></a>
+
+    <div class="collapse navbar-collapse" id="pesertaMainNav">
+      <ul class="navbar-nav ml-auto peserta-menu">
+        <?php if (!isset($disablebtn)) : ?>
+          <li class="nav-item">
+            <a class="nav-link <?= $isDashboard ? 'is-active' : ''; ?>" href="<?= base_url('dashboard') ?>">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('dashboard/profil') ?>">My Profil</a>
+            <a class="nav-link <?= $isProfil ? 'is-active' : ''; ?>" href="<?= base_url('dashboard/profil') ?>">Profil Saya</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('login/logout') ?>">Logout</a>
+            <a class="nav-link nav-link--logout" href="<?= base_url('login/logout') ?>">Logout</a>
           </li>
-
-        </ul>
-      </div>
+        <?php else : ?>
+          <li class="nav-item">
+            <span class="peserta-session-badge">Sesi ujian sedang berlangsung</span>
+          </li>
+        <?php endif; ?>
+      </ul>
     </div>
-  </li>
-<?php else : ?>
-  <li class="navbar navbar-expand-lg navbar navbar-dark bg-primary justify-content-between">
-    <a class="navbar-brand" href="<?= base_url('dashboard') ?>" onclick="return false;">Sistem Ujian Online | Universitas Ubudiyah Indonesia</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="form-inline">
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <!-- <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="<?= base_url('dashboard') ?>" onclick="return false;">Home</a>
-            <li class="nav-item">
-              <a class="nav-link" href="<?= base_url('dashboard/profil') ?>" onclick="return false;">My Profil</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?= base_url('login/logout') ?>" onclick="return false;">Logout</a>
-            </li>
-          </ul> -->
-
-      </div>
-    </div>
-  </li>
-<?php endif; ?>
+  </nav>
+</header>

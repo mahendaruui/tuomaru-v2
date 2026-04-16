@@ -24,6 +24,11 @@ $initialPeserta = !empty($peserta) ? strtoupper(substr(trim((string)$peserta->na
         <p class="peserta-eyebrow">Dashboard Peserta</p>
         <h2 class="peserta-name"><?= strtoupper($peserta->nama); ?></h2>
         <p class="peserta-meta">Nomor Registrasi: <?= $peserta->no_ujian; ?></p>
+        <div class="peserta-chip-row">
+          <span class="peserta-chip">Sesi <?= !empty($peserta->sesi) ? strtoupper($peserta->sesi) : '-'; ?></span>
+          <span class="peserta-chip peserta-chip--accent"><?= $isJadwalAktif ? 'Jadwal Aktif' : 'Menunggu Jadwal'; ?></span>
+          <a class="peserta-chip peserta-chip--link" href="<?= base_url('dashboard/profil') ?>">Lihat Profil</a>
+        </div>
       </div>
     </div>
   <?php endif; ?>
@@ -31,11 +36,11 @@ $initialPeserta = !empty($peserta) ? strtoupper(substr(trim((string)$peserta->na
   <div class="peserta-grid">
     <div class="peserta-card">
       <h3>Status Ujian Online</h3>
-      <p>Halaman ini menampilkan status jadwal ujian Anda. Saat waktu ujian tiba, tombol mulai akan muncul otomatis.</p>
+      <p>Halaman ini menampilkan status jadwal ujian Anda. Saat hitung mundur selesai, tombol mulai akan muncul otomatis.</p>
     </div>
     <div class="peserta-card">
-      <h3>Informasi Penting</h3>
-      <p>Pastikan koneksi internet stabil dan gunakan perangkat yang sama selama sesi ujian berlangsung.</p>
+      <h3>Persiapan Ujian</h3>
+      <p>Pastikan koneksi internet stabil, perangkat terisi daya, dan kerjakan soal hingga batas waktu berakhir.</p>
     </div>
   </div>
 

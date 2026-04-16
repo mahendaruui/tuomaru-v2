@@ -12,6 +12,105 @@
     --peserta-danger: #a5432d;
 }
 
+body {
+    background:
+        radial-gradient(circle at 2% 4%, rgba(36, 74, 71, 0.09), transparent 38%),
+        radial-gradient(circle at 98% 0%, rgba(212, 116, 42, 0.1), transparent 28%),
+        var(--peserta-bg);
+}
+
+.peserta-topbar-wrap {
+    padding: 14px 18px 0;
+}
+
+.peserta-topbar {
+    max-width: 1140px;
+    margin: 0 auto;
+    border-radius: 22px;
+    padding: 12px 18px;
+    background: linear-gradient(145deg, rgba(24, 35, 32, 0.95), rgba(36, 74, 71, 0.94));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 16px 32px rgba(18, 34, 31, 0.28);
+}
+
+.peserta-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.peserta-brand__logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 12px;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.peserta-brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    color: #f7efe3;
+}
+
+.peserta-brand__text strong {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.peserta-brand__text small {
+    font-size: 0.76rem;
+    opacity: 0.82;
+}
+
+.peserta-toggler {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.peserta-menu {
+    align-items: center;
+    gap: 6px;
+}
+
+.peserta-menu .nav-link {
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-weight: 700;
+    color: rgba(247, 239, 227, 0.86);
+    transition: all 0.2s ease;
+}
+
+.peserta-menu .nav-link:hover,
+.peserta-menu .nav-link.is-active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.peserta-menu .nav-link--logout {
+    background: rgba(212, 116, 42, 0.22);
+    color: #ffe8d3;
+}
+
+.peserta-menu .nav-link--logout:hover {
+    background: rgba(212, 116, 42, 0.35);
+}
+
+.peserta-session-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffe8d3;
+    background: rgba(212, 116, 42, 0.22);
+}
+
 .peserta-dashboard {
     max-width: 1140px;
     margin: 28px auto 96px;
@@ -73,6 +172,43 @@
 .peserta-meta {
     margin: 10px 0 0;
     color: var(--peserta-muted);
+}
+
+.peserta-chip-row {
+    margin-top: 14px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.peserta-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(22, 54, 53, 0.16);
+    background: rgba(22, 54, 53, 0.08);
+    color: var(--peserta-panel);
+    padding: 7px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.peserta-chip--accent {
+    border-color: rgba(212, 116, 42, 0.24);
+    background: rgba(212, 116, 42, 0.14);
+    color: #a14f14;
+}
+
+.peserta-chip--link {
+    text-decoration: none;
+}
+
+.peserta-chip--link:hover {
+    text-decoration: none;
+    background: rgba(22, 54, 53, 0.16);
+    color: var(--peserta-panel);
 }
 
 .peserta-grid {
@@ -288,7 +424,258 @@
     text-decoration: none;
 }
 
+/* Selesai page */
+
+.peserta-dashboard--finish {
+    margin-top: 20px;
+}
+
+.finish-layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 18px;
+}
+
+.finish-identity,
+.finish-panel {
+    border-radius: 22px;
+    background: var(--peserta-surface);
+    border: 1px solid var(--peserta-border);
+    box-shadow: 0 12px 28px rgba(18, 34, 31, 0.09);
+}
+
+.finish-identity {
+    padding: 24px;
+}
+
+.finish-name {
+    margin: 0;
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    color: var(--peserta-ink);
+}
+
+.finish-meta {
+    margin: 8px 0 0;
+    color: var(--peserta-muted);
+    font-weight: 600;
+}
+
+.finish-pill {
+    margin-top: 14px;
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #a14f14;
+    border: 1px solid rgba(212, 116, 42, 0.24);
+    background: rgba(212, 116, 42, 0.14);
+}
+
+.finish-panel {
+    padding: 24px;
+}
+
+.finish-status {
+    border-radius: 18px;
+    padding: 18px;
+    border: 1px solid transparent;
+}
+
+.finish-status h3 {
+    margin: 0;
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.3rem, 2.7vw, 2rem);
+    line-height: 1.35;
+}
+
+.finish-status p {
+    margin: 10px 0 0;
+    line-height: 1.7;
+    font-weight: 600;
+}
+
+.finish-status--pending {
+    background: rgba(60, 125, 87, 0.08);
+    border-color: rgba(60, 125, 87, 0.16);
+    color: var(--peserta-success);
+}
+
+.finish-status--pass {
+    background: rgba(26, 109, 66, 0.1);
+    border-color: rgba(26, 109, 66, 0.2);
+    color: #1a6d42;
+}
+
+.finish-status--fail {
+    background: rgba(165, 67, 45, 0.09);
+    border-color: rgba(165, 67, 45, 0.18);
+    color: var(--peserta-danger);
+}
+
+.finish-contact {
+    margin-top: 16px;
+    border-radius: 16px;
+    padding: 14px 16px;
+    border: 1px solid rgba(24, 35, 32, 0.09);
+    background: rgba(255, 250, 242, 0.7);
+}
+
+.finish-contact p {
+    margin: 0;
+    color: var(--peserta-muted);
+}
+
+.finish-contact a {
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: 700;
+    color: var(--peserta-panel);
+}
+
+.finish-actions {
+    margin-top: 18px;
+    max-width: 220px;
+}
+
+/* Profil page */
+
+.peserta-dashboard--profil {
+    margin-top: 20px;
+}
+
+.profil-shell {
+    display: grid;
+    grid-template-columns: 310px minmax(0, 1fr);
+    gap: 18px;
+}
+
+.profil-identity,
+.profil-card {
+    border-radius: 22px;
+    background: var(--peserta-surface);
+    border: 1px solid var(--peserta-border);
+    box-shadow: 0 12px 28px rgba(18, 34, 31, 0.09);
+}
+
+.profil-identity {
+    padding: 24px;
+    text-align: center;
+}
+
+.profil-avatar {
+    width: 158px;
+    height: 158px;
+    object-fit: cover;
+    border-radius: 22px;
+    margin: 0 auto 14px;
+    display: block;
+    border: 1px solid rgba(24, 35, 32, 0.12);
+    background: #f4efe4;
+}
+
+.profil-avatar--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff7eb;
+    background: linear-gradient(135deg, var(--peserta-panel), var(--peserta-panel-2));
+    font-family: 'Sora', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.profil-name {
+    margin: 0;
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    color: var(--peserta-ink);
+}
+
+.profil-subtitle {
+    margin: 8px 0 0;
+    color: var(--peserta-muted);
+    font-weight: 600;
+}
+
+.profil-content {
+    display: grid;
+    gap: 14px;
+}
+
+.profil-card {
+    padding: 22px;
+}
+
+.profil-card h3 {
+    margin: 0 0 12px;
+    font-family: 'Sora', sans-serif;
+    color: var(--peserta-ink);
+    font-size: 1.1rem;
+}
+
+.profil-list {
+    margin: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.profil-list div {
+    border: 1px solid rgba(22, 54, 53, 0.09);
+    border-radius: 14px;
+    background: rgba(255, 250, 242, 0.72);
+    padding: 10px 12px;
+}
+
+.profil-list dt {
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7d7469;
+    margin-bottom: 4px;
+}
+
+.profil-list dd {
+    margin: 0;
+    color: var(--peserta-ink);
+    line-height: 1.55;
+    font-weight: 600;
+}
+
 @media (max-width: 991.98px) {
+    .peserta-topbar-wrap {
+        padding: 12px 12px 0;
+    }
+
+    .peserta-topbar {
+        border-radius: 18px;
+    }
+
+    .peserta-brand__text strong {
+        font-size: 0.82rem;
+    }
+
+    .peserta-brand__text small {
+        font-size: 0.7rem;
+    }
+
+    .peserta-menu {
+        margin-top: 10px;
+        align-items: flex-start;
+    }
+
+    .profil-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .finish-layout {
+        grid-template-columns: 1fr;
+    }
+
     .peserta-hero {
         grid-template-columns: 1fr;
     }
@@ -309,9 +696,40 @@
         padding: 0 14px;
     }
 
+    .peserta-topbar-wrap {
+        padding: 10px 10px 0;
+    }
+
+    .peserta-topbar {
+        padding: 10px 12px;
+    }
+
+    .peserta-brand {
+        gap: 8px;
+        max-width: calc(100% - 60px);
+    }
+
+    .peserta-brand__logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .peserta-brand__text strong {
+        font-size: 0.72rem;
+    }
+
+    .peserta-brand__text small {
+        font-size: 0.64rem;
+    }
+
     .peserta-hero,
     .peserta-card,
-    .exam-panel {
+    .exam-panel,
+    .profil-identity,
+    .profil-card,
+    .finish-identity,
+    .finish-panel {
         padding: 20px;
         border-radius: 20px;
     }
