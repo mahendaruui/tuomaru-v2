@@ -39,6 +39,23 @@
         var toggle = document.getElementById('adminMenuToggle');
         var backdrop = document.getElementById('adminBackdrop');
 
+        // v2 modal toggle (data-toggle="modal" data-target="#id")
+        document.addEventListener('click', function(e) {
+            var trigger = e.target.closest('[data-toggle="modal"]');
+            if (trigger) {
+                e.preventDefault();
+                var targetId = trigger.getAttribute('data-target');
+                if (!targetId) return;
+                var modal = document.querySelector(targetId);
+                if (modal) { modal.classList.toggle('show'); }
+            }
+            var dismiss = e.target.closest('[data-dismiss="modal"]');
+            if (dismiss) {
+                var modal = dismiss.closest('.v2-modal-overlay');
+                if (modal) modal.classList.remove('show');
+            }
+        });
+
         function toggleMenu() {
             if (!app) {
                 return;
