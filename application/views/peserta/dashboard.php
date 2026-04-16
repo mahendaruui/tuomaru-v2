@@ -1,88 +1,89 @@
 <script src="<?= base_url() ?>/assets/js/jqueryqore.js"></script>
 <script src="<?= base_url() ?>/assets/js/jquery.countdown.js"></script>
 
-<?php foreach ($datapeserta as $peserta); ?>
-<div class="container">
-  <div class="row">
-    <div class="col-md-3 mt-5">
-      <div class="card">
-        <div class="el-card-item">
-          <div class="el-card-avatar el-overlay-1 text-center"> <img class="img-thumbnail" src="https://sipenmaru.uui.ac.id/foto/<?= $peserta->foto ?>" alt="user" />
-          </div>
-          <div class="el-card-content text-center">
-            <h4 class="m-b-0 mt-2"><?= strtoupper($peserta->nama); ?></h4> <span class="text-muted">No Registrasi <?= $peserta->no_ujian ?></span>
-          </div>
-        </div>
+<?php
+$peserta = !empty($datapeserta) ? $datapeserta[0] : null;
+$ujian = !empty($cekujian) ? $cekujian[0] : null;
+$isJadwalAktif = !empty($ujian) && (string)$ujian->active === '1';
+$hitungmundur = $isJadwalAktif ? date('Y/m/d H:i:s', $ujian->tgl_tes) : '';
+$fotoPeserta = (!empty($peserta) && !empty($peserta->foto)) ? base_url('foto/' . $peserta->foto) : '';
+$initialPeserta = !empty($peserta) ? strtoupper(substr(trim((string)$peserta->nama), 0, 1)) : 'P';
+?>
+
+<section class="peserta-dashboard">
+  <?php if (!empty($peserta)) : ?>
+    <div class="peserta-hero">
+      <div>
+        <?php if (!empty($fotoPeserta)) : ?>
+          <img class="peserta-avatar" src="<?= $fotoPeserta; ?>" alt="Foto peserta">
+        <?php else : ?>
+          <div class="peserta-avatar-placeholder"><?= $initialPeserta; ?></div>
+        <?php endif; ?>
+      </div>
+      <div>
+        <p class="peserta-eyebrow">Dashboard Peserta</p>
+        <h2 class="peserta-name"><?= strtoupper($peserta->nama); ?></h2>
+        <p class="peserta-meta">Nomor Registrasi: <?= $peserta->no_ujian; ?></p>
       </div>
     </div>
-    <div class="col-md-9">
-      <div class="card-body">
-        <h5 class="card-title">Status Ujian Online</h5>
-        <h2 class="mt-2 mx-auto text-center alert alert-primary">Selamat Datang, <Span class="font-bold"><?= strtoupper($peserta->nama); ?>!</Span></h2>
-        <?php if (isset($cekujian)) : ?>
-          <?php foreach ($cekujian as $ujian);
-          if ($ujian->active) : ?>
+  <?php endif; ?>
 
-            <div class="alert alert-primary">
-              <div class="h3 text-center mb-3">
-                <h3 class=" text-capitalize ">Gelombang ujian telah dibuka!</h3>
-                <hr>
-                <div class="ket text-primary">Silahkan tunggu hitung mundur, Ujian anda sesuai jadwal. Terima kasih!!</div>
-
-              </div>
-              <hr>
-              <div class="h5 text-center mb-3">
-                Tanggal Ujian,
-                <?php $jadwal = $ujian->tgl_tes;
-                echo tgl_indo(date("Y-m-d", $jadwal));
-                echo "<br>";
-                echo date("H:i:s", $jadwal) . " WIB";
-                $hitungmundur = date("Y/m/d H:i:s", $jadwal);
-                ?>
-              </div>
-
-              <div id="hitungmundur" class="text-center mb-3 h4"></div>
-
-              <div class="row">
-                <div class="col-md-3 col-sm-12 m-auto">
-                  <div id="btnstart"></div>
-                </div>
-              </div>
-            <?php else : ?>
-              <div class="alert alert-danger text-center">
-                Jadwal belum dibuka / telah ditutup!!
-              </div>
-            <?php endif; ?>
-
-          <?php else : ?>
-            <div class="alert alert-danger">
-              Anda Belum terdaftar sebagai peserta Ujian Tulis. Silahkan Hubungi panitia penerimaan mahasiswa baru ke email daa[at].uui.ac.id
-            </div>
-          <?php endif; ?>
-            </div>
-      </div>
+  <div class="peserta-grid">
+    <div class="peserta-card">
+      <h3>Status Ujian Online</h3>
+      <p>Halaman ini menampilkan status jadwal ujian Anda. Saat waktu ujian tiba, tombol mulai akan muncul otomatis.</p>
+    </div>
+    <div class="peserta-card">
+      <h3>Informasi Penting</h3>
+      <p>Pastikan koneksi internet stabil dan gunakan perangkat yang sama selama sesi ujian berlangsung.</p>
     </div>
   </div>
-</div>
+
+  <div class="exam-panel">
+    <?php if (!empty($cekujian)) : ?>
+      <?php if ($isJadwalAktif) : ?>
+        <h3>Gelombang ujian telah dibuka</h3>
+        <p>Silakan tunggu hitung mundur. Ujian akan dimulai sesuai jadwal.</p>
+        <div class="exam-schedule">
+          <?= tgl_indo(date('Y-m-d', $ujian->tgl_tes)); ?>
+          <br>
+          <?= date('H:i:s', $ujian->tgl_tes); ?> WIB
+        </div>
+        <div id="hitungmundur" class="exam-countdown"></div>
+        <div class="exam-note ket">Silakan tunggu hingga waktu hitung mundur selesai.</div>
+        <div class="start-wrap" id="btnstart"></div>
+      <?php else : ?>
+        <div class="exam-alert exam-alert--danger">Jadwal ujian belum dibuka atau sudah ditutup.</div>
+      <?php endif; ?>
+    <?php else : ?>
+      <div class="exam-alert exam-alert--danger">
+        Anda belum terdaftar sebagai peserta ujian tulis. Silakan hubungi panitia penerimaan mahasiswa baru melalui email daa[at].uui.ac.id.
+      </div>
+    <?php endif; ?>
+  </div>
+</section>
 
 <script>
-  // 2020/10/10 12:34:56
-  var hitung = '<?= $hitungmundur ?>';
-  $('#hitungmundur').countdown(hitung)
-    .on('update.countdown', function(event) {
-      var format = '%H:%M:%S';
-      if (event.offset.totalDays > 0) {
-        format = '%-d day%!d ' + format;
-      }
-      if (event.offset.weeks > 0) {
-        format = '%-w week%!w ' + format;
-      }
-      $(this).html(event.strftime(format));
-    })
-    .on('finish.countdown', function(event) {
-      $("#btnstart").append(`<form action="<?= base_url('dashboard/lamanUjian') ?>"><button class="btn btn-lg btn-block btn-primary" id="ts-success">Mulai!</button></form>`);
-      $(".ket").html('');
-      $(".ket").append(`<h4 class="text-danger">Klik tombol 'Mulai' untuk memulai ujian, Waktu anda 2 Jam dari jadwal</h4>`);
-      $("#clock").remove();
-    });
+  (function() {
+    var hitung = '<?= $hitungmundur; ?>';
+    if (!hitung) {
+      return;
+    }
+
+    $('#hitungmundur').countdown(hitung)
+      .on('update.countdown', function(event) {
+        var format = '%H:%M:%S';
+        if (event.offset.totalDays > 0) {
+          format = '%-d day%!d ' + format;
+        }
+        if (event.offset.weeks > 0) {
+          format = '%-w week%!w ' + format;
+        }
+        $(this).html(event.strftime(format));
+      })
+      .on('finish.countdown', function() {
+        $('#btnstart').html('<form action="<?= base_url('dashboard/lamanUjian'); ?>"><button class="start-btn" id="ts-success">Mulai Ujian</button></form>');
+        $('.ket').html('<strong>Klik tombol Mulai Ujian untuk memulai tes. Waktu ujian Anda 2 jam dari jadwal.</strong>');
+      });
+  })();
 </script>

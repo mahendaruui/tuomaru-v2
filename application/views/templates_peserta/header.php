@@ -25,6 +25,7 @@
     <link href="<?php echo base_url() ?>/vendor/matrix_admin/assets/libs/jquery-steps/jquery.steps.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>/vendor/matrix_admin/assets/libs/jquery-steps/steps.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>/vendor/matrix_admin/dist/css/style.min.css" rel="stylesheet">
+    <link href="<?php echo base_url() ?>/assets/css/peserta-v2.css" rel="stylesheet">
 </head>
 
 <body>

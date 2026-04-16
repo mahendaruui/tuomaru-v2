@@ -1,0 +1,204 @@
+:root {
+    --peserta-bg: #f5efe3;
+    --peserta-surface: #fffaf2;
+    --peserta-panel: #163635;
+    --peserta-panel-2: #244a47;
+    --peserta-accent: #d4742a;
+    --peserta-accent-2: #efbf66;
+    --peserta-ink: #182320;
+    --peserta-muted: #70766f;
+    --peserta-border: rgba(24, 35, 32, 0.1);
+    --peserta-success: #3c7d57;
+    --peserta-danger: #a5432d;
+}
+
+.peserta-dashboard {
+    max-width: 1140px;
+    margin: 28px auto 96px;
+    padding: 0 18px;
+}
+
+.peserta-hero {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 22px;
+    align-items: center;
+    padding: 26px;
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(255, 250, 242, 0.97), rgba(245, 238, 223, 0.95));
+    border: 1px solid var(--peserta-border);
+    box-shadow: 0 16px 36px rgba(18, 34, 31, 0.12);
+}
+
+.peserta-avatar {
+    width: 136px;
+    height: 136px;
+    border-radius: 22px;
+    object-fit: cover;
+    border: 1px solid rgba(24, 35, 32, 0.12);
+    box-shadow: 0 10px 24px rgba(18, 34, 31, 0.16);
+    background: #f4efe4;
+}
+
+.peserta-avatar-placeholder {
+    width: 136px;
+    height: 136px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--peserta-panel), var(--peserta-panel-2));
+    color: #fff7eb;
+    font-family: 'Sora', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+}
+
+.peserta-eyebrow {
+    margin: 0 0 10px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--peserta-accent);
+}
+
+.peserta-name {
+    margin: 0;
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.4rem, 2.7vw, 2rem);
+    color: var(--peserta-ink);
+}
+
+.peserta-meta {
+    margin: 10px 0 0;
+    color: var(--peserta-muted);
+}
+
+.peserta-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.peserta-card {
+    padding: 24px;
+    border-radius: 22px;
+    background: var(--peserta-surface);
+    border: 1px solid var(--peserta-border);
+    box-shadow: 0 12px 28px rgba(18, 34, 31, 0.08);
+}
+
+.peserta-card h3 {
+    margin: 0 0 10px;
+    font-family: 'Sora', sans-serif;
+    font-size: 1.2rem;
+    color: var(--peserta-ink);
+}
+
+.peserta-card p {
+    margin: 0;
+    color: var(--peserta-muted);
+    line-height: 1.7;
+}
+
+.exam-panel {
+    margin-top: 20px;
+    padding: 26px;
+    border-radius: 24px;
+    border: 1px solid var(--peserta-border);
+    background: var(--peserta-surface);
+    box-shadow: 0 14px 32px rgba(18, 34, 31, 0.1);
+}
+
+.exam-panel h3 {
+    margin: 0 0 10px;
+    font-family: 'Sora', sans-serif;
+    color: var(--peserta-ink);
+}
+
+.exam-schedule {
+    margin: 14px 0 0;
+    padding: 14px 16px;
+    border-radius: 14px;
+    display: inline-block;
+    background: rgba(22, 54, 53, 0.08);
+    color: var(--peserta-panel);
+    font-weight: 700;
+}
+
+.exam-countdown {
+    margin: 16px 0;
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.4rem, 3.6vw, 2.2rem);
+    color: var(--peserta-panel);
+}
+
+.exam-note {
+    margin-top: 12px;
+    color: var(--peserta-muted);
+}
+
+.exam-note strong {
+    color: var(--peserta-danger);
+}
+
+.start-wrap {
+    margin-top: 16px;
+    max-width: 280px;
+}
+
+.start-btn {
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 18px;
+    font-weight: 800;
+    color: #fff7eb;
+    background: linear-gradient(135deg, var(--peserta-panel), var(--peserta-panel-2));
+    box-shadow: 0 16px 28px rgba(22, 54, 53, 0.24);
+}
+
+.exam-alert {
+    margin-top: 10px;
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-weight: 600;
+}
+
+.exam-alert--danger {
+    background: rgba(165, 67, 45, 0.08);
+    color: var(--peserta-danger);
+    border: 1px solid rgba(165, 67, 45, 0.15);
+}
+
+.exam-alert--info {
+    background: rgba(60, 125, 87, 0.1);
+    color: var(--peserta-success);
+    border: 1px solid rgba(60, 125, 87, 0.18);
+}
+
+@media (max-width: 991.98px) {
+    .peserta-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .peserta-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .peserta-dashboard {
+        margin-top: 18px;
+        padding: 0 14px;
+    }
+
+    .peserta-hero,
+    .peserta-card,
+    .exam-panel {
+        padding: 20px;
+        border-radius: 20px;
+    }
+}
