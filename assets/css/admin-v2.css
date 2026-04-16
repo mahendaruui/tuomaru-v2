@@ -1095,6 +1095,17 @@ a:hover {
     color: var(--admin-ink);
 }
 
+.action-btn--danger-soft {
+    background: rgba(165, 67, 45, 0.1);
+    color: var(--admin-danger);
+    border: 1px solid rgba(165, 67, 45, 0.16);
+    box-shadow: 0 10px 20px rgba(165, 67, 45, 0.08);
+}
+
+.action-btn--danger-soft:hover {
+    color: var(--admin-danger);
+}
+
 /* ── Role Access page ──────────────────────────── */
 
 .role-access-meta {
@@ -1774,6 +1785,120 @@ a:hover {
     border-bottom: 0;
 }
 
+/* ── Hasil tes ──────────────────────────────────────────────── */
+
+.result-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.result-filter-card {
+    padding: 20px 22px;
+}
+
+.result-filter-form {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.result-filter-form .field-block {
+    min-width: 240px;
+    flex: 1 1 280px;
+}
+
+.result-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.hasil-table td {
+    vertical-align: middle;
+}
+
+.answer-split {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.answer-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.answer-pill--good {
+    background: rgba(60, 125, 87, 0.12);
+    color: var(--admin-success);
+}
+
+.answer-pill--bad {
+    background: rgba(165, 67, 45, 0.08);
+    color: var(--admin-danger);
+}
+
+.answer-divider {
+    color: var(--admin-muted);
+    font-weight: 700;
+}
+
+.score-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 54px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--admin-panel), var(--admin-panel-3));
+    color: #fff7eb;
+    font-weight: 800;
+}
+
+.result-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.result-status--pass {
+    background: rgba(60, 125, 87, 0.12);
+    color: var(--admin-success);
+}
+
+.result-status--fail {
+    background: rgba(165, 67, 45, 0.08);
+    color: var(--admin-danger);
+}
+
+.result-status--pending {
+    background: rgba(24, 35, 32, 0.08);
+    color: var(--admin-muted);
+}
+
+.row-actions--wrap {
+    flex-wrap: wrap;
+}
+
+.row-action.is-disabled {
+    pointer-events: none;
+    opacity: 0.45;
+}
+
 /* ── Atur peserta ───────────────────────────────────────────── */
 
 .assign-summary {
@@ -1939,7 +2064,8 @@ a:hover {
     .soal-form-grid,
     .detail-side-stack--two,
     .assign-grid,
-    .assign-summary {
+    .assign-summary,
+    .result-summary-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -2000,6 +2126,11 @@ a:hover {
     .assign-card__head,
     .assign-bulkbar {
         flex-direction: column;
+        align-items: stretch;
+    }
+
+    .result-filter-form,
+    .result-filter-actions {
         align-items: stretch;
     }
 }

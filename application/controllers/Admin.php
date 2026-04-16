@@ -668,58 +668,30 @@ class Admin extends CI_Controller
 
         $ceknilaisiswa = $this->my_model->tampil("nilaites a")->result();
 
-        //untuk aipt
-        // count peserta sudah ujian
-        $lulus2018 = array(
-            'tahun' => "2018",
-            'status' => "Y",
-        );
-        $data['jmls2018'] = $this->my_model->cek_data('nilaitesaipt', $lulus2018)->num_rows();
+        $hasilSummary = [
+            'lulus' => 0,
+            'tidak_lulus' => 0,
+            'pending' => 0,
+        ];
 
-        // count peserta sudah ujian
-        $lulus2019 = array(
-            'tahun' => "2019",
-            'status' => "Y",
-        );
-        $data['jmls2019'] = $this->my_model->cek_data('nilaitesaipt', $lulus2019)->num_rows();
+        foreach ($ceknilaisiswa as $hasil) {
+            if ($hasil->status === 'Y') {
+                $hasilSummary['lulus']++;
+            } elseif ($hasil->status === 'N') {
+                $hasilSummary['tidak_lulus']++;
+            } else {
+                $hasilSummary['pending']++;
+            }
+        }
 
-        // count peserta sudah ujian
-        $lulus2020 = array(
-            'tahun' => "2020",
-            'status' => "Y",
-        );
-        $data['jmls2020'] = $this->my_model->cek_data('nilaitesaipt', $lulus2020)->num_rows();
-
-        $tlulus2018 = array(
-            'tahun' => "2018",
-            'status' => "N",
-        );
-        $data['jmtls2018'] = $this->my_model->cek_data('nilaitesaipt', $tlulus2018)->num_rows();
-
-        // count peserta sudah ujian
-        $tlulus2019 = array(
-            'tahun' => "2019",
-            'status' => "N",
-        );
-        $data['jmtls2019'] = $this->my_model->cek_data('nilaitesaipt', $tlulus2019)->num_rows();
-
-        // count peserta sudah ujian
-        $tlulus2020 = array(
-            'tahun' => "2020",
-            'status' => "N",
-        );
-        $data['jmtls2020'] = $this->my_model->cek_data('nilaitesaipt', $tlulus2020)->num_rows();
-
-
-        $ceknilaisiswa2 = $this->my_model->tampil("nilaitesaipt")->result_array();
         $data['nilaitessiswa'] = $ceknilaisiswa;
-        $data['nilaitessiswa2'] = $ceknilaisiswa2;
+        $data['hasilSummary'] = $hasilSummary;
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/viewhasil', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/viewhasil_v2', $data);
+        $this->load->view('templates_v2/footer');
     }
 
     public function hasiltes()
