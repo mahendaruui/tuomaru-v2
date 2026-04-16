@@ -192,20 +192,10 @@ class Admin extends CI_Controller
             'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
         ];
 
-        $col = 1;
         foreach ($headers as $colLetter => $info) {
-            $cell = $sheet1->getCellByColumnAndRow($col, 1);
-            $cell->setValue($info['label']);
-            $sheet1->getStyleByColumnAndRow($col, 1)->applyFromArray($headerStyle);
-            $sheet1->getColumnDimensionByColumn($col)->setAutoSize(true);
-            $col++;
-        }
-
-        // 10 baris kosong
-        for ($row = 2; $row <= 11; $row++) {
-            for ($c = 1; $c <= count($headers); $c++) {
-                $sheet1->getCellByColumnAndRow($c, $row)->setValue('');
-            }
+            $sheet1->setCellValue($colLetter . '1', $info['label']);
+            $sheet1->getStyle($colLetter . '1')->applyFromArray($headerStyle);
+            $sheet1->getColumnDimension($colLetter)->setAutoSize(true);
         }
 
         // Freeze header row
