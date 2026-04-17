@@ -4,11 +4,20 @@
             <p class="admin-eyebrow">Manajemen Data</p>
             <h2 class="section-title">Data Peserta</h2>
         </div>
-        <a href="<?= base_url('admin/downloadTemplatePeserta'); ?>" class="action-btn">
-            <i class="fas fa-download"></i>
-            Download Template
-        </a>
+        <div class="section-head__actions">
+            <a href="<?= base_url('admin/downloadTemplatePeserta'); ?>" class="action-btn">
+                <i class="fas fa-download"></i>
+                Download Template
+            </a>
+            <?php if (!empty($pendaftar)) : ?>
+                <a href="<?= base_url('admin/downloadImportPasswords'); ?>" class="action-btn action-btn--warning">
+                    <i class="fas fa-key"></i>
+                    Download Password Peserta
+                </a>
+            <?php endif; ?>
+        </div>
     </div>
+    
 
     <!-- Flash message import -->
     <?php $__msg = $this->session->userdata('import_msg'); if ($__msg) : $this->session->unset_userdata('import_msg'); ?>

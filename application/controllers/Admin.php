@@ -289,6 +289,7 @@ class Admin extends CI_Controller
         $inserted = 0;
         $skipped  = 0;
         $errors   = [];
+        $importedCredentials = [];
 
         foreach ($rows as $line) {
             $row++;
@@ -380,6 +381,20 @@ class Admin extends CI_Controller
 
             $this->db->insert('pendaftar', $data);
             $inserted++;
+
+            $importedCredentials[] = [
+                'no_ujian' => $noUjian,
+                'nama'     => $nama,
+                'email'    => $email,
+                'hp'       => $hp,
+                'pass'     => $pass,
+            ];
+        }
+
+        if (!empty($importedCredentials)) {
+            $this->session->set_userdata('import_password_rows', $importedCredentials);
+        } else {
+            $this->session->unset_userdata('import_password_rows');
         }
 
         $type = ($inserted > 0) ? 'success' : 'warning';
@@ -400,6 +415,94 @@ class Admin extends CI_Controller
 
         $this->session->set_userdata('import_msg', "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>{$msg}<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
         redirect('admin/viewpeserta');
+    }
+
+    public function downloadImportPasswords()
+    {
+        is_logged_in();
+
+        $rows = $this->session->userdata('import_password_rows');
+        if (empty($rows) || !is_array($rows)) {
+            // Fallback: ambil data peserta dari tabel yang sedang ditampilkan (gelombang terkini)
+            $latestRow = $this->db
+                ->select('id_jdwl')
+                ->where('id_jdwl IS NOT NULL')
+                ->order_by('id_jdwl', 'DESC')
+                ->limit(1)
+                ->get('pendaftar')
+                ->row();
+
+            if ($latestRow && $latestRow->id_jdwl !== null) {
+                $dbRows = $this->db
+                    ->select('no_ujian, nama, email, hp, pass')
+                    ->where('id_jdwl', $latestRow->id_jdwl)
+                    ->order_by('id', 'DESC')
+                    ->get('pendaftar')
+                    ->result_array();
+            } else {
+                $dbRows = $this->db
+                    ->select('no_ujian, nama, email, hp, pass')
+                    ->order_by('id', 'DESC')
+                    ->get('pendaftar')
+                    ->result_array();
+            }
+
+            if (empty($dbRows)) {
+                $this->session->set_userdata('import_msg', "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Belum ada data peserta untuk diunduh.<button type='button' class='close' data-dismiss='alert'><span>&times;</span></button></div>");
+                redirect('admin/viewpeserta');
+                return;
+            }
+
+            $rows = $dbRows;
+        }
+
+        require_once FCPATH . 'vendor/autoload.php';
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Password Peserta');
+
+        $headers = ['No', 'No Ujian', 'Nama Peserta', 'Email', 'No HP', 'Password'];
+        foreach ($headers as $idx => $label) {
+            $cell = chr(65 + $idx) . '1';
+            $sheet->setCellValue($cell, $label);
+        }
+
+        $sheet->getStyle('A1:F1')->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2E6662'],
+            ],
+        ]);
+
+        $line = 2;
+        $no = 1;
+        foreach ($rows as $r) {
+            $sheet->setCellValue('A' . $line, $no);
+            $sheet->setCellValueExplicit('B' . $line, (string)($r['no_ujian'] ?? ''), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('C' . $line, (string)($r['nama'] ?? ''));
+            $sheet->setCellValue('D' . $line, (string)($r['email'] ?? ''));
+            $sheet->setCellValueExplicit('E' . $line, (string)($r['hp'] ?? ''), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit('F' . $line, (string)($r['pass'] ?? ''), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $line++;
+            $no++;
+        }
+
+        foreach (range('A', 'F') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+        $sheet->freezePane('A2');
+
+        $filename = 'password_import_peserta_' . date('Ymd_His') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
     }
 
     public function viewsoal()
