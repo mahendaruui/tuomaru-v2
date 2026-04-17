@@ -39,7 +39,7 @@ if ($status === 'Y') {
 
         <div class="finish-contact">
           <p>Untuk informasi lebih lanjut, hubungi panitia atau kunjungi website resmi berikut:</p>
-          <a href="https://sipenmaru.uui.ac.id" target="_blank" rel="noopener noreferrer">https://uui.siakadcloud.com</a>
+          <a href="https://uui.siakadcloud.com" target="_blank" rel="noopener noreferrer">https://uui.siakadcloud.comfi</a>
         </div>
 
         <div class="finish-actions">

@@ -39,6 +39,103 @@ body.auth-shell {
     color: #c86419;
 }
 
+/* Admin-specific overrides */
+
+.auth-login--admin body,
+body:has(.auth-login--admin) {
+    background:
+        radial-gradient(circle at top left, rgba(22, 54, 53, 0.28), transparent 36%),
+        radial-gradient(circle at bottom right, rgba(18, 34, 31, 0.22), transparent 30%),
+        linear-gradient(145deg, #1b2e2c 0%, #243e3b 40%, #1e3432 100%);
+}
+
+.auth-login--admin .auth-login__card {
+    background: rgba(28, 46, 44, 0.65);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 28px 80px rgba(6, 16, 15, 0.48);
+}
+
+.auth-login--admin .auth-brand {
+    background:
+        linear-gradient(160deg, rgba(8, 26, 24, 0.98), rgba(20, 52, 49, 0.96)),
+        linear-gradient(135deg, rgba(239, 191, 102, 0.08), transparent 55%);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.auth-login--admin .auth-brand__crest {
+    background: rgba(255, 247, 235, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 247, 235, 0.08);
+}
+
+.auth-login--admin .auth-brand__stat {
+    background: rgba(255, 247, 235, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 247, 235, 0.06);
+}
+
+.auth-login--admin .auth-brand__eyebrow {
+    color: rgba(212, 116, 42, 0.82);
+}
+
+.auth-login--admin .auth-panel {
+    background: rgba(15, 32, 30, 0.88);
+    backdrop-filter: blur(18px);
+}
+
+.auth-login--admin .auth-panel__eyebrow {
+    color: var(--auth-accent);
+}
+
+.auth-login--admin .auth-panel__title {
+    color: #f2ece2;
+}
+
+.auth-login--admin .auth-panel__text {
+    color: rgba(224, 218, 208, 0.72);
+}
+
+.auth-login--admin .auth-label {
+    color: rgba(224, 218, 208, 0.9);
+}
+
+.auth-login--admin .auth-input-wrap {
+    background: rgba(255, 250, 242, 0.07);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.auth-login--admin .auth-input-wrap:focus-within {
+    border-color: var(--auth-accent);
+    box-shadow: 0 0 0 4px rgba(212, 116, 42, 0.16);
+}
+
+.auth-login--admin .auth-input-wrap i {
+    color: rgba(212, 116, 42, 0.72);
+}
+
+.auth-login--admin .auth-input {
+    color: #f2ece2;
+}
+
+.auth-login--admin .auth-input::placeholder {
+    color: rgba(224, 218, 208, 0.38);
+}
+
+.auth-login--admin .auth-submit {
+    background: linear-gradient(135deg, #d4742a, #c05e1a);
+    box-shadow: 0 18px 30px rgba(212, 116, 42, 0.32);
+}
+
+.auth-login--admin .auth-submit:hover {
+    box-shadow: 0 22px 36px rgba(212, 116, 42, 0.4);
+}
+
+.auth-login--admin .auth-note {
+    color: rgba(224, 218, 208, 0.6);
+}
+
+.auth-login--admin .auth-alert {
+    color: rgba(255, 180, 150, 0.9);
+}
+
 .auth-login::before,
 .auth-login::after {
     content: '';

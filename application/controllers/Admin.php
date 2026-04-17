@@ -335,6 +335,20 @@ class Admin extends CI_Controller
                 continue;
             }
 
+            // Cek duplikat email (hanya jika diisi)
+            if ($email !== '' && $this->db->get_where('pendaftar', ['email' => $email])->row()) {
+                $errors[] = "Baris $row ($noUjian): email '$email' sudah terdaftar, dilewati.";
+                $skipped++;
+                continue;
+            }
+
+            // Cek duplikat no HP (hanya jika diisi)
+            if ($hp !== '' && $this->db->get_where('pendaftar', ['hp' => $hp])->row()) {
+                $errors[] = "Baris $row ($noUjian): no HP '$hp' sudah terdaftar, dilewati.";
+                $skipped++;
+                continue;
+            }
+
             // Generate password acak 5 karakter (huruf besar + angka)
             $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             $pass  = '';

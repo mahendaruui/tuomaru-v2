@@ -81,7 +81,7 @@ mysqli_report(MYSQLI_REPORT_OFF);
 
 $db['default'] = array(
     'dsn'    => '',
-    'hostname' => 'localhost',
+    'hostname' => '127.0.0.1',
     'username' => 'root',
     'password' => '',
     'database' => 'tuomaru',

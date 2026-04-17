@@ -1,4 +1,4 @@
-<section class="auth-login">
+<section class="auth-login auth-login--admin">
     <div class="auth-login__card">
         <aside class="auth-brand">
             <div>
