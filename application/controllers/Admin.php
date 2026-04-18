@@ -505,6 +505,233 @@ class Admin extends CI_Controller
         exit;
     }
 
+    // ── Atur Admin ──────────────────────────────────────────────────
+
+    public function aturAdmin()
+    {
+        $data['title'] = 'Atur Admin';
+        $data['user']  = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['admins'] = $this->db->order_by('id', 'ASC')->get('user')->result_array();
+        $data['roles']  = $this->db->get('user_role')->result_array();
+
+        $data['admin_msg'] = $this->session->userdata('admin_msg');
+        $this->session->unset_userdata('admin_msg');
+
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/atur_admin_v2', $data);
+        $this->load->view('templates_v2/footer');
+    }
+
+    public function tambahAdmin()
+    {
+        $name     = trim($this->input->post('name', true));
+        $email    = trim($this->input->post('email', true));
+        $password = trim($this->input->post('password', true));
+        $role_id  = (int) $this->input->post('role_id');
+
+        if (empty($name) || empty($email) || empty($password)) {
+            $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Semua field wajib diisi.</div>');
+            redirect('admin/aturAdmin');
+            return;
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Format email tidak valid.</div>');
+            redirect('admin/aturAdmin');
+            return;
+        }
+        if ($this->db->get_where('user', ['email' => $email])->row()) {
+            $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Email sudah terdaftar.</div>');
+            redirect('admin/aturAdmin');
+            return;
+        }
+        if (strlen($password) < 6) {
+            $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Password minimal 6 karakter.</div>');
+            redirect('admin/aturAdmin');
+            return;
+        }
+
+        $this->db->insert('user', [
+            'name'         => $name,
+            'email'        => $email,
+            'password'     => password_hash($password, PASSWORD_BCRYPT),
+            'image'        => 'default.jpg',
+            'role_id'      => $role_id ?: 1,
+            'is_active'    => 1,
+            'date_created' => time(),
+        ]);
+
+        $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--success"><i class="fas fa-check-circle"></i> Admin <strong>' . htmlspecialchars($name) . '</strong> berhasil ditambahkan.</div>');
+        redirect('admin/aturAdmin');
+    }
+
+    public function editAdmin()
+    {
+        $id      = (int) $this->input->post('id');
+        $name    = trim($this->input->post('name', true));
+        $role_id = (int) $this->input->post('role_id');
+
+        if (!$id || empty($name)) {
+            $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Data tidak valid.</div>');
+            redirect('admin/aturAdmin');
+            return;
+        }
+
+        $this->db->where('id', $id)->update('user', ['name' => $name, 'role_id' => $role_id ?: 1]);
+        $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--success"><i class="fas fa-check-circle"></i> Data admin berhasil diperbarui.</div>');
+        redirect('admin/aturAdmin');
+    }
+
+    public function resetPasswordAdmin()
+    {
+        $id       = (int) $this->input->post('id');
+        $password = trim($this->input->post('password', true));
+
+        if (!$id || strlen($password) < 6) {
+            $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Password minimal 6 karakter.</div>');
+            redirect('admin/aturAdmin');
+            return;
+        }
+
+        $this->db->where('id', $id)->update('user', ['password' => password_hash($password, PASSWORD_BCRYPT)]);
+        $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--success"><i class="fas fa-check-circle"></i> Password admin berhasil direset.</div>');
+        redirect('admin/aturAdmin');
+    }
+
+    public function toggleAdmin($id)
+    {
+        $id   = (int) $id;
+        $self = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        if ($self['id'] == $id) {
+            $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Tidak dapat mengubah status akun sendiri.</div>');
+            redirect('admin/aturAdmin');
+            return;
+        }
+
+        $admin = $this->db->get_where('user', ['id' => $id])->row_array();
+        if (!$admin) { redirect('admin/aturAdmin'); return; }
+
+        $newStatus = $admin['is_active'] ? 0 : 1;
+        $this->db->where('id', $id)->update('user', ['is_active' => $newStatus]);
+        $label = $newStatus ? 'diaktifkan' : 'dinonaktifkan';
+        $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--success"><i class="fas fa-check-circle"></i> Admin <strong>' . htmlspecialchars($admin['name']) . '</strong> berhasil ' . $label . '.</div>');
+        redirect('admin/aturAdmin');
+    }
+
+    public function hapusAdmin($id)
+    {
+        $id   = (int) $id;
+        $self = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        if ($self['id'] == $id) {
+            $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Tidak dapat menghapus akun sendiri.</div>');
+            redirect('admin/aturAdmin');
+            return;
+        }
+
+        $admin = $this->db->get_where('user', ['id' => $id])->row_array();
+        if (!$admin) { redirect('admin/aturAdmin'); return; }
+
+        $this->db->where('id', $id)->delete('user');
+        $this->session->set_userdata('admin_msg', '<div class="v2-alert v2-alert--success"><i class="fas fa-check-circle"></i> Admin <strong>' . htmlspecialchars($admin['name']) . '</strong> berhasil dihapus.</div>');
+        redirect('admin/aturAdmin');
+    }
+
+    // ── Profil ──────────────────────────────────────────────────────
+
+    public function profil()
+    {
+        $data['title'] = 'Profil Admin';
+        $data['user']  = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $this->load->view('templates_v2/header', $data);
+        $this->load->view('templates_v2/sidebar', $data);
+        $this->load->view('templates_v2/topbar', $data);
+        $this->load->view('admin/profil_v2', $data);
+        $this->load->view('templates_v2/footer');
+    }
+
+    public function profilUpdate()
+    {
+        $email = $this->session->userdata('email');
+        $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
+
+        $name = trim($this->input->post('name', true));
+        if (empty($name)) {
+            $this->session->set_userdata('profil_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Nama tidak boleh kosong.</div>');
+            redirect('admin/profil');
+            return;
+        }
+
+        // Upload foto jika ada
+        if (!empty($_FILES['image']['name'])) {
+            $config = [
+                'allowed_types' => 'jpg|jpeg|png|gif',
+                'max_size'      => 2048,
+                'upload_path'   => FCPATH . 'assets/img/profile/',
+            ];
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload('image')) {
+                $old = $data['user']['image'] ?? '';
+                if ($old && $old !== 'default.jpg' && file_exists(FCPATH . 'assets/img/profile/' . $old)) {
+                    unlink(FCPATH . 'assets/img/profile/' . $old);
+                }
+                $this->db->set('image', $this->upload->data('file_name'));
+            } else {
+                $this->session->set_userdata('profil_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> ' . $this->upload->display_errors('', '') . '</div>');
+                redirect('admin/profil');
+                return;
+            }
+        }
+
+        $this->db->set('name', $name);
+        $this->db->where('email', $email);
+        $this->db->update('user');
+
+        $this->session->set_userdata('profil_msg', '<div class="v2-alert v2-alert--success"><i class="fas fa-check-circle"></i> Profil berhasil diperbarui.</div>');
+        redirect('admin/profil');
+    }
+
+    public function profilPassword()
+    {
+        $email = $this->session->userdata('email');
+        $user  = $this->db->get_where('user', ['email' => $email])->row_array();
+
+        $current = $this->input->post('current_password');
+        $new1    = trim($this->input->post('new_password1', true));
+        $new2    = trim($this->input->post('new_password2', true));
+
+        if (!password_verify($current, $user['password'])) {
+            $this->session->set_userdata('pass_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Password lama tidak sesuai.</div>');
+            redirect('admin/profil');
+            return;
+        }
+        if (strlen($new1) < 6) {
+            $this->session->set_userdata('pass_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Password baru minimal 6 karakter.</div>');
+            redirect('admin/profil');
+            return;
+        }
+        if ($new1 !== $new2) {
+            $this->session->set_userdata('pass_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Konfirmasi password tidak cocok.</div>');
+            redirect('admin/profil');
+            return;
+        }
+        if ($current === $new1) {
+            $this->session->set_userdata('pass_msg', '<div class="v2-alert v2-alert--danger"><i class="fas fa-times-circle"></i> Password baru tidak boleh sama dengan yang lama.</div>');
+            redirect('admin/profil');
+            return;
+        }
+
+        $this->db->set('password', password_hash($new1, PASSWORD_BCRYPT));
+        $this->db->where('email', $email);
+        $this->db->update('user');
+
+        $this->session->set_userdata('pass_msg', '<div class="v2-alert v2-alert--success"><i class="fas fa-check-circle"></i> Password berhasil diubah.</div>');
+        redirect('admin/profil');
+    }
+
     public function viewsoal()
     {
         $this->load->model('my_model');

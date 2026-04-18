@@ -24,9 +24,9 @@
                 <img class="admin-user__avatar" src="<?= base_url('assets/img/profile/') . $user['image']; ?>" alt="<?= $user['name']; ?>">
             </button>
             <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="userDropdownV2">
-                <a class="dropdown-item" href="<?= base_url('user'); ?>">
+                <a class="dropdown-item" href="<?= base_url('admin/profil'); ?>">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-muted"></i>
-                    My Profile
+                    Profil Saya
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="<?= base_url('auth/logout'); ?>" data-toggle="modal" data-target="#logoutModal">
