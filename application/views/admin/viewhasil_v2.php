@@ -5,6 +5,10 @@
             <h2 class="section-title">Manajemen Hasil Tes</h2>
         </div>
         <div class="section-head__actions">
+            <a href="<?= base_url('admin/downloadHasilTes' . (!empty($selected_gelombang) ? '?gelombang=' . urlencode($selected_gelombang) : '')); ?>" class="action-btn action-btn--success-soft">
+                <i class="fas fa-file-excel"></i>
+                Download Excel
+            </a>
             <a href="<?= base_url('admin/hasiltes'); ?>" class="action-btn action-btn--danger-soft">
                 <i class="fas fa-sync"></i>
                 Update Data

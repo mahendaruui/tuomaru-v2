@@ -1043,6 +1043,86 @@ class Admin extends CI_Controller
         $this->load->view('templates_v2/footer');
     }
 
+    public function downloadHasilTes()
+    {
+        is_logged_in();
+        require_once FCPATH . 'vendor/autoload.php';
+
+        $selected_gelombang = $this->input->get('gelombang');
+
+        $this->db->select('a.no_ujian, b.nama, b.sesi, a.jwb_b, a.jwb_s, a.status');
+        $this->db->from('nilaites a');
+        $this->db->join('pendaftar b', 'b.no_ujian = a.no_ujian');
+        $this->db->order_by('a.id', 'DESC');
+        if (!empty($selected_gelombang)) {
+            $this->db->where('b.sesi', $selected_gelombang);
+        }
+        $rows = $this->db->get()->result_array();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Hasil Tes');
+
+        $headers = ['No', 'Gelombang', 'No Ujian', 'Nama', 'Jawaban Benar', 'Jawaban Salah', 'Nilai', 'Status'];
+        foreach ($headers as $idx => $label) {
+            $sheet->setCellValue(chr(65 + $idx) . '1', $label);
+        }
+
+        $sheet->getStyle('A1:H1')->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => [
+                'fillType'   => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2E6662'],
+            ],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+        ]);
+
+        $line = 2;
+        $no   = 1;
+        foreach ($rows as $r) {
+            $benar = (int) $r['jwb_b'];
+            $salah = (int) $r['jwb_s'];
+            $total = $benar + $salah;
+            $nilai = $total > 0 ? (int) round(($benar / $total) * 100) : 0;
+
+            $status = (string) $r['status'];
+            if ($status === 'Y') {
+                $statusLabel = 'Lulus';
+            } elseif ($status === 'N') {
+                $statusLabel = 'Tidak Lulus';
+            } else {
+                $statusLabel = 'Belum Diputuskan';
+            }
+
+            $sheet->setCellValue('A' . $line, $no);
+            $sheet->setCellValue('B' . $line, 'Gel. ' . ($r['sesi'] ?: '-'));
+            $sheet->setCellValueExplicit('C' . $line, (string) $r['no_ujian'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D' . $line, $r['nama']);
+            $sheet->setCellValue('E' . $line, $benar);
+            $sheet->setCellValue('F' . $line, $salah);
+            $sheet->setCellValue('G' . $line, $nilai);
+            $sheet->setCellValue('H' . $line, $statusLabel);
+            $line++;
+            $no++;
+        }
+
+        foreach (range('A', 'H') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+        $sheet->freezePane('A2');
+
+        $suffix   = !empty($selected_gelombang) ? '_gel' . $selected_gelombang : '';
+        $filename = 'hasil_tes' . $suffix . '_' . date('Ymd_His') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
     public function hasiltes()
     {
         $data['title'] = 'Manajemen Hasil Ujian';
