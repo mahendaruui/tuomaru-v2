@@ -894,6 +894,96 @@ class Admin extends CI_Controller
         $this->load->view('templates_v2/footer');
     }
 
+    public function downloadPesertaGelombang($gel)
+    {
+        is_logged_in();
+        $gel = (int) $gel;
+        require_once FCPATH . 'vendor/autoload.php';
+
+        $rows = $this->db
+            ->select('no_ujian, pass, nama, tempat, tanggal, jenkel, email, hp, no_identitas, asal_sekolah, agama, alamat, alamat_desa, alamat_kec, alamat_kota, alamat_prov')
+            ->where('sesi', $gel)
+            ->order_by('id', 'ASC')
+            ->get('pendaftar')
+            ->result_array();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Peserta Gelombang ' . $gel);
+
+        $headers = [
+            'A' => 'No',
+            'B' => 'No Ujian',
+            'C' => 'Password',
+            'D' => 'Nama Lengkap',
+            'E' => 'Tempat Lahir',
+            'F' => 'Tanggal Lahir',
+            'G' => 'J/K',
+            'H' => 'Email',
+            'I' => 'No HP',
+            'J' => 'NIK',
+            'K' => 'Asal Sekolah',
+            'L' => 'Agama',
+            'M' => 'Alamat',
+            'N' => 'Desa',
+            'O' => 'Kecamatan',
+            'P' => 'Kota/Kabupaten',
+            'Q' => 'Provinsi',
+        ];
+
+        foreach ($headers as $col => $label) {
+            $sheet->setCellValue($col . '1', $label);
+        }
+
+        $sheet->getStyle('A1:Q1')->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => [
+                'fillType'   => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2E6662'],
+            ],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+        ]);
+
+        $line = 2;
+        $no   = 1;
+        foreach ($rows as $r) {
+            $sheet->setCellValue('A' . $line, $no);
+            $sheet->setCellValueExplicit('B' . $line, (string) ($r['no_ujian'] ?? ''), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit('C' . $line, (string) ($r['pass']     ?? ''), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D' . $line, $r['nama']          ?? '');
+            $sheet->setCellValue('E' . $line, $r['tempat']        ?? '');
+            $sheet->setCellValue('F' . $line, $r['tanggal']       ?? '');
+            $sheet->setCellValue('G' . $line, $r['jenkel']        ?? '');
+            $sheet->setCellValue('H' . $line, $r['email']         ?? '');
+            $sheet->setCellValueExplicit('I' . $line, (string) ($r['hp']           ?? ''), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit('J' . $line, (string) ($r['no_identitas'] ?? ''), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('K' . $line, $r['asal_sekolah']  ?? '');
+            $sheet->setCellValue('L' . $line, $r['agama']         ?? '');
+            $sheet->setCellValue('M' . $line, $r['alamat']        ?? '');
+            $sheet->setCellValue('N' . $line, $r['alamat_desa']   ?? '');
+            $sheet->setCellValue('O' . $line, $r['alamat_kec']    ?? '');
+            $sheet->setCellValue('P' . $line, $r['alamat_kota']   ?? '');
+            $sheet->setCellValue('Q' . $line, $r['alamat_prov']   ?? '');
+            $line++;
+            $no++;
+        }
+
+        foreach (range('A', 'Q') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+        $sheet->freezePane('A2');
+
+        $filename = 'peserta_gelombang' . $gel . '_' . date('Ymd_His') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
     public function aturpeserta()
     {
         $this->load->model('my_model');

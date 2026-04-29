@@ -6,6 +6,10 @@
         </div>
         <div class="section-head__actions">
             <span class="gelombang-badge">Gelombang <?= htmlspecialchars($gel); ?></span>
+            <a href="<?= base_url('admin/downloadPesertaGelombang/' . urlencode($gel)); ?>" class="action-btn action-btn--success-soft">
+                <i class="fas fa-file-excel"></i>
+                Download Excel
+            </a>
             <a href="<?= base_url('admin/jadwal'); ?>" class="action-btn action-btn--ghost">
                 <i class="fas fa-arrow-left"></i>
                 Kembali ke Jadwal
